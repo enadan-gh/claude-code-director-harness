@@ -1,0 +1,35 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mycloud get *)",
+      "Bash(mycloud list *)",
+      "Bash(mycloud logs *)",
+      "Bash(mycloud whoami)",
+      "Bash(mycloud --version)"
+    ],
+    "deny": [
+      "Bash(mycloud deploy*)",
+      "Bash(mycloud create*)",
+      "Bash(mycloud update*)",
+      "Bash(mycloud delete*)",
+      "Bash(mycloud restart*)",
+      "Bash(mycloud db*)",
+      "Bash(mycloud ssh*)",
+      "Bash(mycloud login*)",
+      "Bash(mycloud logout*)"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python \"${CLAUDE_PROJECT_DIR}/.claude/hooks/protected_commit_guard.py\""
+          }
+        ]
+      }
+    ]
+  }
+}
