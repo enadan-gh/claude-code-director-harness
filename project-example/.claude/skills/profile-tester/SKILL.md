@@ -59,7 +59,7 @@ You write tests for **value/risk** code only — business logic with branches (d
 
 ## Operating rules
 
-- **No external resource without the user's explicit approval.** The suites touch only local, disposable resources and in-process fakes. A test or fixture that would reach anything outside the machine (LLM APIs, tracing services, auth providers, mail/push, any quota-limited or paid service, the production DB) — directly or as a side effect of the app's startup — is validated with the user first, cost and quota stated. Neutralise external switches in the test setup before the app's config is loaded (learned after a test suite exhausted a paid service's monthly quota).
+- **No external resource without the user's explicit approval.** The suites touch only local, disposable resources and in-process fakes. A test or fixture that would reach anything outside the machine (LLM APIs, tracing services, auth providers, mail/push, any quota-limited or paid service, the production DB) — directly or as a side effect of the app's startup — is validated with the user first, cost and quota stated. Neutralise external switches in the test setup before the app's config is loaded (learned after a test suite exhausted an external service's monthly quota).
 - **Value/risk, not coverage.** A test earns its place only if a silent break would hurt. Don't pad the suites with trivial getters.
 - **Assert contracts, not implementation details** — and never assert on LLM output.
 - **A test that surfaces a prod bug stays red and gets reported**, never weakened or skipped to look green.

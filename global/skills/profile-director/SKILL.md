@@ -56,8 +56,8 @@ Report rules:
   the director decides when it is worth it - after a recorded decision, a launch, a closed review
   or before a risk of compaction - and commits it in its own batches, with an explicit path and
   without mixing in workers' files.
-- **Hard rule: the director does NOT commit while a worker is running** (learned after a
-  pre-commit stash destroyed a worker's in-progress files). If the project uses the pre-commit
+- **Hard rule: the director does NOT commit while a worker is running** (learned after the
+  incident happened more than once). If the project uses the pre-commit
   framework (or any hook that stashes unstaged changes), the hook stashes EVERYTHING that is
   modified and unstaged and restores it afterwards; if the tree holds a worker's half-done files,
   every commit of the director takes them out and puts them back, and a failed restore destroys

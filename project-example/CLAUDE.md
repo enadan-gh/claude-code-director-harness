@@ -155,7 +155,7 @@ All generated `.md` files MUST go inside `docs/`:
 
 **Exception:** only `CLAUDE.md` and `README.md` may exist at root.
 
-<If the repo holds gitignored credentials (e.g. `docs/secret/`), say here: never read, write, or commit it.>
+`<If the repo holds gitignored credentials, e.g. docs/secret/, say here: never read, write, or commit it.>`
 
 ---
 
