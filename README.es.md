@@ -40,7 +40,7 @@ Todo vive en un único **informe**: un fichero markdown en el proyecto con el co
 | --- | --- | --- |
 | `global/` | La skill del director (`skills/profile-director/`), los agentes (`agents/worker.md`, `agents/quick-fixer.md`), los comandos de flujo (`commands/do-feature.md`, `commands/fix-bug.md`, `commands/rework.md`), la skill `new-feature` con su índice de skills, el hook `rm-md-guard.sh` y `settings.example.json` | `~/.claude/`, con las mismas subcarpetas. `settings.example.json` se fusiona con tu `~/.claude/settings.json`, no lo sustituye |
 | `global/templates/` | `commit.md` y `update-docs.md`: plantillas, no comandos | El original se queda en `~/.claude/templates/`; una copia adaptada va al `.claude/commands/` de cada proyecto |
-| `optional/` | Dos agentes (`Explore` y `web-fetch`) que sustituyen a los integrados solo para elegir modelo y esfuerzo | `~/.claude/agents/`, si los quieres |
+| `optional/` | `Explore`, que sustituye al agente Explore integrado solo para elegir modelo y esfuerzo, y `web-fetch`, un agente ligero adicional que lee páginas web públicas con un modelo más barato | `~/.claude/agents/`, si los quieres |
 | `project-example/` | Lo que lleva el repositorio de un proyecto: una plantilla de `CLAUDE.md`, cinco perfiles de trabajo (`.claude/skills/profile-*`), un hook que vigila los commits de ficheros protegidos, la configuración del proyecto y un comando `/deploy` | El repositorio de un proyecto, sustituyendo cada `<placeholder>` |
 | `docs/` | Esta documentación: la guía y el registro de reglas, en inglés y en español | A ninguna parte; es para leer |
 

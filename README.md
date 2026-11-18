@@ -40,7 +40,7 @@ Everything lives in one **report**: a markdown file in the project with the cont
 | --- | --- | --- |
 | `global/` | Director skill (`skills/profile-director/`), agents (`agents/worker.md`, `agents/quick-fixer.md`), workflow commands (`commands/do-feature.md`, `commands/fix-bug.md`, `commands/rework.md`), the `new-feature` skill with its skills index, the `rm-md-guard.sh` hook and `settings.example.json` | `~/.claude/`, keeping the same subfolders. Merge `settings.example.json` into your own `~/.claude/settings.json` instead of overwriting it |
 | `global/templates/` | `commit.md` and `update-docs.md`: templates, not commands | The source stays in `~/.claude/templates/`; an adapted copy goes to each project's `.claude/commands/` |
-| `optional/` | Two agents (`Explore`, `web-fetch`) that override the built-in ones only to choose a model and effort | `~/.claude/agents/`, if you want them |
+| `optional/` | `Explore`, which overrides the built-in Explore agent only to choose model and effort, and `web-fetch`, an extra lightweight agent that reads public web pages on a cheaper model | `~/.claude/agents/`, if you want them |
 | `project-example/` | What a project repository carries: a `CLAUDE.md` template, five work profiles (`.claude/skills/profile-*`), a project hook that guards commits of protected files, project settings and a `/deploy` command | A project repository, replacing every `<placeholder>` |
 | `docs/` | This documentation: the guide and the rules log, in English and Spanish | Nowhere; it is for reading |
 

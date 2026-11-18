@@ -8,8 +8,9 @@ package and it contains no language or framework skills.
 
 - `global/` — files a user copies to `~/.claude/` (director skill, agents, workflow commands,
   templates, hook, example settings).
-- `optional/` — optional agents that override Claude Code's built-in ones only to choose model and
-  effort.
+- `optional/` — optional agents: `Explore` overrides Claude Code's built-in Explore agent only to
+  choose model and effort; `web-fetch` is an additional lightweight agent (not an override) that
+  reads public web pages on a cheaper model.
 - `project-example/` — files a user copies into a project repo and adapts (`CLAUDE.md` template,
   profiles, project hook, settings, deploy command).
 - `docs/` — human-facing guides (when they exist).
