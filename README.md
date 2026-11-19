@@ -4,6 +4,22 @@
 
 > **Work in progress.** This repository is still being shaped and tested, so things may change. It does not accept contributions (issues and pull requests are closed), but you are free to copy it and adapt it to your needs; that is the whole idea.
 
+## Set it up with your AI agent
+
+Open Claude Code in your project and tell it: "Set up the director harness from https://github.com/enadan-gh/claude-code-director-harness in this project." You need Claude Code, because the harness is made of Claude Code skills and agents.
+
+### Instructions for the agent
+
+If a user gave you this repository's URL and asked you to set it up in their project, do this, in order:
+
+1. Do not install anything into the user's project yet. Explain to the user, in one or two plain sentences, what this is (a director session that plans with them and hands work to helper agents, reviewing what really changed and keeping a written report) and that you will now run an interview to build their own version.
+2. Get a local copy of this repository OUTSIDE the user's project. If git is available, run `git clone https://github.com/enadan-gh/claude-code-director-harness.git` into a folder the user agrees on (propose, for example, `~/claude-code-director-harness`). Without git, download and extract https://github.com/enadan-gh/claude-code-director-harness/archive/refs/heads/main.zip instead. Ask before writing anywhere.
+3. Copy `global/skills/init-harness/` from that copy to `~/.claude/skills/init-harness/`. Tell the user that a permission prompt will appear because `~/.claude` is protected, and that this is expected. If that folder already exists, do not overwrite it: tell the user, and use the existing one only if it is identical to the copy, otherwise ask.
+4. A skill installed mid-session may not be available as `/init-harness` until the next session. Do not ask the user to restart: read `~/.claude/skills/init-harness/SKILL.md` and follow it now, in this session, step by step, using the local copy from step 2 as the reference repository (`<repo>`). Its optional rules catalog is `<repo>/global/skills/init-harness/optional-rules.md`.
+5. Follow that skill's rules: plain language, a few questions at a time in chat, show every file before writing it, never overwrite.
+
+This is the same guided route described under "Getting started", driven by your agent.
+
 This is how I work with Claude Code. I build real products on my own, with Claude Code inside VS Code, and some friends asked me how I organise it. Instead of explaining it over and over, I put the files I actually use here, cleaned of anything personal and with comments on why each piece exists.
 
 ## What it is
