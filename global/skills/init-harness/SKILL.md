@@ -67,7 +67,7 @@ every project; "project" pieces live in the project and are always written new f
 | `/commit` | `global/templates/commit.md` | Commit only the current task's files and push | Project, adapted from the template |
 | `/update-docs` | `global/templates/update-docs.md` | Close a task: check the code, update the docs, delete the progress doc | Project, adapted from the template |
 | Profiles | `project-example/.claude/skills/profile-*/SKILL.md` | Per-area roles with an edit scope (backend, frontend, planner, auditor, tester) | Project |
-| Delete guard hook | `global/hooks/rm-md-guard.sh` + `global/settings.example.json` | Forces a permission prompt for any deletion except progress docs and temporary files; deny rules for `rm -rf` | Global |
+| Delete guard hook | `global/hooks/rm-md-guard.sh` + `global/settings.example.json` | Asks before any deletion, except progress docs and temporary files the same command creates; deny rules for `rm -rf` | Global |
 | Protected-commit hook | `project-example/.claude/hooks/protected_commit_guard.py` + `project-example/.claude/settings.json` | Asks before committing files a compiler cannot check (translations, legal texts) | Project |
 | `/deploy` | `project-example/.claude/commands/deploy.md` | Evaluate, show the plan, deploy only after explicit consent | Project |
 | Optional preferences | `${CLAUDE_SKILL_DIR}/optional-rules.md` | Questions in chat vs the question tool, model per agent, Explore/web-fetch agents, testing policy, cleanup (Boy Scout) rule | Applied to the installed copies or the project's `CLAUDE.md` |
@@ -184,7 +184,7 @@ Even so, if the user only wants rules in a `CLAUDE.md` and no agents, that is a 
 | `/fix-bug` | Real bugs to diagnose in code they cannot read themselves | Static content with no logic |
 | `/commit` | They use git | No git |
 | `/update-docs` | They chose the progress-doc workflows | No progress docs |
-| Delete guard hook | Valuable work an agent could delete; `jq` and bash are available | They chose no progress-doc workflows and the deny rules in settings are enough; a non-technical user who would not understand its prompts |
+| Delete guard hook | The user allows Bash without prompts (for example `Bash` in the allow list, to avoid constant prompts), or wants to: it is the safety net for deletions. Explain it in one plain sentence: "even with commands allowed, the AI will ask you before deleting any file" | They stay on Claude Code's default permissions (every command already asks, so the hook adds nothing), or bash or `jq` are not available |
 | Protected-commit hook | Files a compiler cannot check (translations, legal texts) and git | No such files, or no git |
 | `/deploy` | They deploy by merging or pushing to deploy branches, or by a command that must never run by accident | They publish by hand, or there is nothing to deploy |
 | Optional preferences | Read the catalog and offer only the entries that matter to this person; ask about each in plain words | Entries about things they did not choose (testing policy without tests, quick-fixer model without a quick-fixer) |
