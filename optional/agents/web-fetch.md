@@ -2,7 +2,7 @@
 name: web-fetch
 description: Fetches and reads public web pages and answers the question asked about them (a summary, a fact, a comparison). Use it whenever a public URL holds the answer. Put the full URL(s) and the task in the prompt — its report is the answer. It fails on authenticated or private URLs (Google Docs, Confluence, Jira, private GitHub); use gh or an authenticated MCP tool for those.
 tools: WebFetch
-model: claude-sonnet-5-5  # suggestion: this file exists only to pick model/effort; remove to inherit the session's model
+model: sonnet  # suggestion: this file exists only to pick model/effort; remove to inherit the session's model
 effort: medium  # suggestion: remove to inherit the session's effort
 ---
 

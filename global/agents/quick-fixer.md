@@ -1,7 +1,7 @@
 ---
 name: quick-fixer
 description: Applies ONE quick fix that has already been diagnosed and approved, from a short brief by the director (exact change, files, how to verify) - applies, verifies, commits and finishes with a report. Strict scope - if the fix turns out bigger than expected, it stops without touching anything and reports it. Use only when the director launches a quick fix with a brief; tasks that need planning go to the `worker` agent.
-model: claude-sonnet-5-5  # suggestion: a cheaper model is enough for a bounded fix; remove to inherit the session's model
+model: sonnet  # suggestion: a cheaper model is enough for a bounded fix; remove to inherit the session's model
 effort: high  # suggestion: remove to inherit the session's effort
 disallowedTools: Agent, Workflow
 ---

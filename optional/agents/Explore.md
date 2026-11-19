@@ -2,7 +2,7 @@
 name: Explore
 description: Read-only search agent for broad fan-out searches — when answering means sweeping many files, directories, or naming conventions and you only need the conclusion, not the file dumps. It locates code and reports where things are; it doesn't review, audit or edit it. Specify search breadth in the prompt: "medium" for moderate exploration, "very thorough" for multiple locations and naming conventions.
 tools: Read, Grep, Glob, Bash
-model: claude-sonnet-5-5  # suggestion: this file exists only to pick model/effort; remove to inherit the session's model
+model: sonnet  # suggestion: this file exists only to pick model/effort; remove to inherit the session's model
 effort: medium  # suggestion: remove to inherit the session's effort
 ---
 
