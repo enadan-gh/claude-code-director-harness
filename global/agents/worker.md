@@ -59,23 +59,16 @@ them. The brief only adds what is particular to the task.
    protects (the project's CLAUDE.md or its local /commit command says which, e.g. localization
    files), or that the brief marks as "committed by the director", **are not staged or committed**:
    leave them modified and UNSTAGED and list them in your report; the director commits them.
-   **The pre-commit hook stashes and restores other people's changes**: if the project uses the
-   pre-commit framework (or any hook that stashes unstaged changes) and there are modified files
-   that are not yours when you commit (the director's report in the project's audit/report folder
-   is the usual case), the hook puts them in a temporary stash and restores them when it finishes;
-   this is expected and you must not touch them. After each `git commit`, run `git status --short`
-   and check that those files are still modified exactly as they were; if the hook failed to
-   restore them (pre-commit error message, someone else's file clean or gone), **stop**: do not try
-   to recover them or repeat the commit, finish with the report describing what happened and the
-   director resolves it. Never commit with `--no-verify` to get around the hook.
+   Before every commit, run `git status --short` and check that only your own files go into it;
+   files that are not yours (the director's report is the usual case) stay modified and untouched.
 5. **Documentation close-out.** If the task had a progress doc, run the project's close-out (its
    /update-docs command, if it has one; otherwise follow the close-out rules in the brief and
    CLAUDE.md) **after** the commit, and commit that close-out too.
 6. **Deletions, all at the end.** During the task you delete nothing: everything you create that
    must disappear (test data or threads, rows, temporary files, branches, helper scripts) goes into
    an **inventory** (what, where, how it is deleted). Deletions run in this single step, after the
-   documentation close-out and right before the report: that way, if a hook permission stops you, it
-   stops you at the end of the use case and not halfway. If it blocks you anyway, finish with the
+   documentation close-out and right before the report: that way, if a permission prompt stops you,
+   it stops you at the end of the use case and not halfway. If it blocks you anyway, finish with the
    report including the pending inventory; the director resolves it.
 7. **Final report** (20 lines max) addressed to the director: files touched, commit hashes,
    decisions taken alone, numbered with their reason (also recorded in the progress doc while it
@@ -104,8 +97,8 @@ and finish with another equally short report.
   nothing. To wait for a long process, run it in the foreground with enough `timeout` (up to 10
   minutes per call) or with `run_in_background` and carry on with another part of the task until
   its notification arrives. Never poll with `sleep` loops.
-- **Deletions file by file**: never `rm -rf` or deletion of whole folders (the hook vetoes them);
-  delete each file by its path and then `rmdir` the empty folder.
+- **Deletions file by file**: never `rm -rf` or deletion of whole folders; delete each file by its
+  path and then `rmdir` the empty folder.
 - Do not touch files of other workers or of the director even if you see them modified.
 - The report goes in the user's language (the language of the brief if unclear); code, comments,
   commits and files in English.

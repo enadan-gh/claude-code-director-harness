@@ -33,6 +33,8 @@ Las decisiones se anotan en el mismo turno en que se toman, y con mi motivo **en
 
 El informe es responsabilidad del director. Hace commit de él sin preguntarme, en sus propios commits, con la ruta explícita y nunca mientras haya un worker en marcha (la sección 4 explica por qué).
 
+Un director y su informe sirven para una línea de trabajo, una tarea o un bloque de tareas relacionadas, no para el proyecto entero para siempre. Cuando el bloque termina, cierro la línea, y el siguiente bloque empieza con una sesión de director nueva y un informe nuevo. Un informe grande, incluso de unos 100k tokens, está bien si el trabajo es así de grande: releer el informe sigue siendo mucho más barato que releer la conversación que lo produjo, y de eso se trata.
+
 ### Retomar después de una pausa: la caché
 
 Claude Code guarda la conversación en la caché de prompts durante un tiempo limitado. Según la [documentación oficial de configuración](https://code.claude.com/docs/en/settings) (el ajuste `promptCacheTtl`), en el momento de escribir esto el valor por defecto es de 1 hora con una suscripción de Claude (dentro de sus límites de uso) y de 5 minutos con una clave de API, Bedrock, Vertex o Foundry. Puede cambiar.
@@ -72,8 +74,8 @@ Los agentes trabajan en el mismo árbol de trabajo que el director, sin aislarse
 El precio es un conjunto de reglas sobre los commits, porque varias sesiones comparten un mismo árbol:
 
 - Cada agente hace commit solo de sus rutas, de forma explícita. Nunca `git add -A`.
-- **El director no hace commit mientras hay un worker en marcha.** Si el proyecto usa el framework pre-commit (o cualquier hook que guarde en un stash los cambios no preparados), cada commit mete en el stash todos los ficheros no preparados del árbol y luego los restaura. Si el árbol contiene ficheros a medio hacer de un worker, una restauración fallida los destruye. El director deja que sus cambios en el informe se acumulen en disco y solo hace commit cuando no hay ningún worker en marcha, después de comprobar con `git status --short` que los únicos ficheros modificados son los suyos.
-- Tras cada commit, el agente ejecuta `git status --short` y comprueba que los ficheros ajenos siguen modificados exactamente igual. Si no es así, se para e informa; no intenta recuperarlos.
+- **El director no hace commit mientras hay un worker en marcha.** Los ficheros a medio hacer del worker están en el mismo árbol, así que un commit en mal momento puede interferir con ellos. El director deja que sus cambios en el informe se acumulen en disco y solo hace commit cuando no hay ningún worker en marcha, después de comprobar con `git status --short` que los únicos ficheros modificados son los suyos.
+- Antes de cada commit, el agente ejecuta `git status --short` y comprueba que en el commit solo entran sus propios ficheros. Los ficheros ajenos siguen modificados y no se tocan.
 
 Si trabajas en equipo, o quieres varios agentes implementando a la vez, puede que los worktrees te encajen mejor. La skill del director admite `isolation: "worktree"` cuando el usuario lo pide.
 
@@ -85,7 +87,7 @@ A veces llevo dos líneas de trabajo a la vez, cada una con su director, en el m
 
 **Nombro un único coordinador principal.** Las decisiones sobre lo compartido (quién hace commit y cuándo, quién toca un fichero común) las toma un director, no todos hablando con todos.
 
-**El riesgo conocido.** La regla «el director no hace commit mientras hay un worker en marcha» protege a los workers de ese director, no a los de otro. Un director que no sabe nada del worker del otro puede hacer commit en mitad de su tarea y disparar el stash de pre-commit sobre sus ficheros. El coordinador decide quién hace commit y cuándo, y cada director ejecuta `git status --short` antes de cada commit y no lo hace si ve ficheros que no son suyos.
+**El riesgo conocido.** La regla «el director no hace commit mientras hay un worker en marcha» protege a los workers de ese director, no a los de otro. Un director que no sabe nada del worker del otro puede hacer commit en mitad de su tarea e interferir con sus ficheros a medio hacer. El coordinador decide quién hace commit y cuándo, y cada director ejecuta `git status --short` antes de cada commit y no lo hace si ve ficheros que no son suyos.
 
 ## 6. Comandos por proyecto a partir de plantillas
 
@@ -111,14 +113,7 @@ Lo que sigue se basa en la documentación oficial de Claude Code: [permisos](htt
 
 **Rutas protegidas.** La carpeta `.claude` (y `.git`, `.vscode` y algunas más) es una ruta protegida: las reglas de permitir no aprueban de antemano las escrituras en ella. En el modo por defecto las apruebas tú, y puedes aprobarlas para toda la sesión. El modo `auto` deriva esas escrituras a un clasificador. `bypassPermissions` se salta las comprobaciones, y yo solo lo usaría en un entorno aislado (un contenedor o una máquina desechable).
 
-**Una regla de denegación es una red, no un muro.** `settings.example.json` deniega `Bash(rm -rf *)` y sus variantes. Eso para el caso habitual, pero no `bash -c '...'` ni `/bin/rm`. Tómala como red de seguridad contra errores, no como frontera de seguridad.
-
-**El hook `rm-md-guard.sh`** (`global/hooks/rm-md-guard.sh`) se ejecuta antes de cada llamada a Bash. No dice nada en los comandos que no borran. Ante cualquier `rm` (o `git rm`) fuerza una petición de permiso, salvo en dos casos que considera seguros: borrar ficheros `.md` dentro de `docs/progress/` o `docs/rework/` (los documentos de progreso que `/update-docs` elimina al cerrar una tarea) y borrar un fichero que el mismo comando ha creado con una redirección o con `tee` (un fichero temporal). Divide los comandos compuestos y juzga cada segmento; ante cualquier duda, pide permiso. Dos cosas que conviene saber:
-
-- necesita `jq`; sin él, el hook no puede leer el comando y lo deja pasar todo sin decir nada;
-- hay que registrarlo como hook `PreToolUse` sobre `Bash` en tu configuración, como muestra `global/settings.example.json`.
-
-El ejemplo de proyecto trae un segundo hook, `project-example/.claude/hooks/protected_commit_guard.py`, que pide permiso antes de cualquier commit que meta un fichero protegido (traducciones, textos legales), salvo que el comando lleve un token de aprobación. Los agentes dejan esos ficheros modificados y sin preparar, y el director hace commit de ellos tras revisarlos.
+El ejemplo de proyecto trae un hook, `project-example/.claude/hooks/protected_commit_guard.py`, que pide permiso antes de cualquier commit que meta un fichero protegido (traducciones, textos legales), salvo que el comando lleve un token de aprobación. Los agentes dejan esos ficheros modificados y sin preparar, y el director hace commit de ellos tras revisarlos.
 
 ## 8. Preferencias opcionales
 

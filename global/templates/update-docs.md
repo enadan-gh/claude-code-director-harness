@@ -99,8 +99,6 @@ _None._
 2. Delete the file with **exactly** this command, from the repo root and with the relative path (no `cd`, no absolute paths, no quotes, no extra flags):
    - Features from `/new-feature` → `rm -f docs/progress/[task-name].md`
    - Reworks from `/rework` → `rm -f docs/rework/[task-name].md`
-
-   This form is the one the global hook `rm-md-guard.sh` lets through without asking for permission; any other variant interrupts the automatic flow.
 3. Tell the user that the closing is complete
 
 ## Flow summary

@@ -13,10 +13,11 @@ Abre Claude Code en tu proyecto y dile: «Instala el harness de director de http
 Si un usuario te ha dado la URL de este repositorio y te ha pedido instalarlo en su proyecto, haz esto, en orden:
 
 1. No instales nada todavía en el proyecto del usuario. Explícale, en una o dos frases sencillas, qué es esto (una sesión director que planifica con él y reparte el trabajo entre agentes auxiliares, revisando lo que ha cambiado de verdad y llevando un informe escrito) y que ahora vas a hacerle una entrevista para construir su propia versión.
-2. Consigue una copia local de este repositorio FUERA del proyecto del usuario. Si hay git disponible, ejecuta `git clone https://github.com/enadan-gh/claude-code-director-harness.git` en una carpeta que el usuario acepte (propón, por ejemplo, `~/claude-code-director-harness`). Sin git, descarga y descomprime https://github.com/enadan-gh/claude-code-director-harness/archive/refs/heads/main.zip. Pregunta antes de escribir en ningún sitio.
-3. Copia `global/skills/init-harness/` de esa copia a `~/.claude/skills/init-harness/`. Avisa al usuario de que aparecerá una petición de permiso porque `~/.claude` está protegida, y de que es lo esperado. Si esa carpeta ya existe, no la sobrescribas: díselo al usuario y usa la existente solo si es idéntica a la copia; si no, pregunta.
-4. Una skill instalada a mitad de sesión puede no estar disponible como `/init-harness` hasta la siguiente sesión. No le pidas al usuario que reinicie: lee `~/.claude/skills/init-harness/SKILL.md` y síguela ahora, en esta misma sesión, paso a paso, usando la copia local del paso 2 como repositorio de referencia (`<repo>`). Su catálogo de reglas opcionales es `<repo>/global/skills/init-harness/optional-rules.md`.
-5. Sigue las reglas de esa skill: lenguaje sencillo, pocas preguntas cada vez y en el chat, enseña cada fichero antes de escribirlo y no sobrescribas nunca.
+2. Averigua si el usuario usa git. Si no lo usa, explícale en dos frases sencillas qué le aporta (puede deshacer cualquier cosa y ver exactamente qué ha cambiado la IA) y respeta su decisión; la skill init-harness se ocupa del resto.
+3. Consigue una copia local de este repositorio FUERA del proyecto del usuario. Si hay git disponible, ejecuta `git clone https://github.com/enadan-gh/claude-code-director-harness.git` en una carpeta que el usuario acepte (propón, por ejemplo, `~/claude-code-director-harness`). Sin git, descarga y descomprime https://github.com/enadan-gh/claude-code-director-harness/archive/refs/heads/main.zip. Pregunta antes de escribir en ningún sitio.
+4. Copia `global/skills/init-harness/` de esa copia a `~/.claude/skills/init-harness/`. Avisa al usuario de que aparecerá una petición de permiso porque `~/.claude` está protegida, y de que es lo esperado. Si esa carpeta ya existe, no la sobrescribas: díselo al usuario y usa la existente solo si es idéntica a la copia; si no, pregunta.
+5. Una skill instalada a mitad de sesión puede no estar disponible como `/init-harness` hasta la siguiente sesión. No le pidas al usuario que reinicie: lee `~/.claude/skills/init-harness/SKILL.md` y síguela ahora, en esta misma sesión, paso a paso, usando la copia local del paso 3 como repositorio de referencia (`<repo>`). Su catálogo de reglas opcionales es `<repo>/global/skills/init-harness/optional-rules.md`.
+6. Sigue las reglas de esa skill: lenguaje sencillo, pocas preguntas cada vez y en el chat, enseña cada fichero antes de escribirlo y no sobrescribas nunca.
 
 Es la misma ruta guiada que se describe en «Cómo empezar», conducida por tu agente.
 
@@ -26,7 +27,7 @@ Así es como trabajo con Claude Code. Desarrollo productos reales yo solo, con C
 
 Un ejemplo comentado de una forma de trabajar: una sesión de Claude Code hace de **director**, que habla conmigo, decide conmigo y reparte el trabajo entre **agentes que se ejecutan en segundo plano**, y luego revisa lo que entregan. En una línea: es como hablar con un jefe de proyecto que ha repartido el trabajo entre su equipo.
 
-El repositorio contiene los ficheros que lo hacen posible: una skill para el director, dos definiciones de agente (`worker` y `quick-fixer`), los comandos de flujo de trabajo que siguen los agentes, plantillas para comandos de cada proyecto, un hook de seguridad, una configuración de ejemplo y un ejemplo completo de lo que lleva el repositorio de un proyecto (su `CLAUDE.md`, perfiles de trabajo, un hook propio y un comando de despliegue).
+El repositorio contiene los ficheros que lo hacen posible: una skill para el director, dos definiciones de agente (`worker` y `quick-fixer`), los comandos de flujo de trabajo que siguen los agentes, plantillas para comandos de cada proyecto y un ejemplo completo de lo que lleva el repositorio de un proyecto (su `CLAUDE.md`, perfiles de trabajo, un hook propio y un comando de despliegue).
 
 No contiene skills de lenguajes ni de frameworks, y no es un paquete que se instale.
 
@@ -56,7 +57,7 @@ Todo vive en un único **informe**: un fichero markdown en el proyecto con el co
 
 | Carpeta | Qué contiene | Adónde va |
 | --- | --- | --- |
-| `global/` | La skill del director (`skills/profile-director/`), los agentes (`agents/worker.md`, `agents/quick-fixer.md`), los comandos de flujo (`commands/do-feature.md`, `commands/fix-bug.md`, `commands/rework.md`), la skill `new-feature` con su índice de skills, el hook `rm-md-guard.sh` y `settings.example.json` | `~/.claude/`, con las mismas subcarpetas. `settings.example.json` se fusiona con tu `~/.claude/settings.json`, no lo sustituye |
+| `global/` | La skill del director (`skills/profile-director/`), los agentes (`agents/worker.md`, `agents/quick-fixer.md`), los comandos de flujo (`commands/do-feature.md`, `commands/fix-bug.md`, `commands/rework.md`) y la skill `new-feature` con su índice de skills | `~/.claude/`, con las mismas subcarpetas |
 | `global/templates/` | `commit.md` y `update-docs.md`: plantillas, no comandos | El original se queda en `~/.claude/templates/`; una copia adaptada va al `.claude/commands/` de cada proyecto |
 | `optional/` | `Explore`, que sustituye al agente Explore integrado solo para elegir modelo y esfuerzo, y `web-fetch`, un agente ligero adicional que lee páginas web públicas con un modelo más barato | `~/.claude/agents/`, si los quieres |
 | `project-example/` | Lo que lleva el repositorio de un proyecto: una plantilla de `CLAUDE.md`, cinco perfiles de trabajo (`.claude/skills/profile-*`), un hook que vigila los commits de ficheros protegidos, la configuración del proyecto y un comando `/deploy` | El repositorio de un proyecto, sustituyendo cada `<placeholder>` |
@@ -65,7 +66,7 @@ Todo vive en un único **informe**: un fichero markdown en el proyecto con el co
 ## Cómo empezar
 
 1. **Lee antes de copiar.** Empieza por `global/skills/profile-director/SKILL.md` y `global/agents/worker.md`; ahí está todo el modelo.
-2. **Copia y adapta la parte global.** Copia el contenido de `global/` en `~/.claude/`. Fusiona en tu configuración el registro del hook y las reglas de denegación de `settings.example.json`. El hook necesita `jq` instalado. Sustituye las entradas de ejemplo de `skills/new-feature/skills-index.md` por tus propias skills.
+2. **Copia y adapta la parte global.** Copia el contenido de `global/` en `~/.claude/`. Sustituye las entradas de ejemplo de `skills/new-feature/skills-index.md` por tus propias skills.
 3. **Prepara un proyecto.** Copia `project-example/CLAUDE.md` y `project-example/.claude/` en tu proyecto y rellena los placeholders. Crea los comandos `/commit` y `/update-docs` del proyecto a partir de `global/templates/`. Quédate solo con los perfiles que tengan sentido para tu stack.
 4. **Abre una sesión en el proyecto** y activa el director: «activate the director profile» o «director mode» (son las frases que lista la descripción de la skill; si quieres pedirlo en español, añádelas allí).
 5. **Dile lo que quieres**, como se lo dirías a un jefe de proyecto. Leerá el código, te preguntará lo que necesite para decidir y empezará a lanzar agentes.

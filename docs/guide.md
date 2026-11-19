@@ -33,6 +33,8 @@ Decisions are recorded in the same turn they are taken, and with my reason **in 
 
 The report is the director's responsibility. It commits it without asking me, in its own commits, with an explicit path, and never while a worker is running (section 4 explains why).
 
+A director and its report serve one stream of work, a task or a block of related tasks, not the project for ever. When the block is done, I close the stream, and the next block starts with a new director session and a new report. A large report, even around 100k tokens, is fine when the work is that large: re-reading the report is still far cheaper than re-reading the conversation that produced it, and that is the point.
+
 ### Resuming after a break: the prompt cache
 
 Claude Code keeps the conversation in the prompt cache for a limited time. According to the official [settings documentation](https://code.claude.com/docs/en/settings) (the `promptCacheTtl` setting), at the time of writing the default is 1 hour on a Claude subscription (within its usage limits) and 5 minutes with an API key, Bedrock, Vertex or Foundry. This may change.
@@ -72,8 +74,8 @@ The agents work in the same working tree as the director, without worktree isola
 The cost is a set of commit rules, because several sessions share one tree:
 
 - Each agent commits only its own paths, explicitly. Never `git add -A`.
-- **The director does not commit while a worker is running.** If the project uses the pre-commit framework (or any hook that stashes unstaged changes), every commit stashes all the unstaged files in the tree and restores them afterwards. If the tree holds a worker's half-done files, a failed restore destroys them. The director lets its edits to the report pile up on disk and commits only when no worker is running, after checking with `git status --short` that the only modified files are its own.
-- After each commit, an agent runs `git status --short` and checks that other people's files are still modified exactly as they were. If not, it stops and reports; it does not try to recover them.
+- **The director does not commit while a worker is running.** The worker's half-done files are in the same tree, so a commit at the wrong moment can interfere with them. The director lets its edits to the report pile up on disk and commits only when no worker is running, after checking with `git status --short` that the only modified files are its own.
+- Before each commit, an agent runs `git status --short` and checks that only its own files go into the commit. Other people's files stay modified and untouched.
 
 If you work in a team, or you want several agents implementing at the same time, worktrees may suit you better. The director skill supports `isolation: "worktree"` when the user asks for it.
 
@@ -85,7 +87,7 @@ Sometimes I run two work streams at once, each with its own director, in the sam
 
 **I name one main coordinator.** Decisions about shared things (who commits when, who touches a shared file) are taken by one director, not by everyone talking to everyone.
 
-**The known risk.** The rule "the director does not commit while a worker is running" protects that director's own workers, not another director's. A director that does not know about the other director's worker can commit in the middle of its task and trigger the pre-commit stash on its files. The coordinator decides who commits and when, and every director runs `git status --short` before each commit and does not commit if it sees files that are not its own.
+**The known risk.** The rule "the director does not commit while a worker is running" protects that director's own workers, not another director's. A director that does not know about the other director's worker can commit in the middle of its task and interfere with its half-done files. The coordinator decides who commits and when, and every director runs `git status --short` before each commit and does not commit if it sees files that are not its own.
 
 ## 6. Per-project commands from templates
 
@@ -111,14 +113,7 @@ What follows is based on Claude Code's official documentation: [permissions](htt
 
 **Protected paths.** The `.claude` folder (and `.git`, `.vscode` and a few others) is a protected path: allow rules do not pre-approve writes there. In the default mode you approve them, and you can approve them for the session. The `auto` mode routes those writes to a classifier. `bypassPermissions` skips the checks, and I would only use it in an isolated environment (a container or a disposable machine).
 
-**A deny rule is a net, not a wall.** `settings.example.json` denies `Bash(rm -rf *)` and its variants. That catches the common case, but not `bash -c '...'` or `/bin/rm`. Treat it as a safety net for mistakes, not as a security boundary.
-
-**The `rm-md-guard.sh` hook** (`global/hooks/rm-md-guard.sh`) runs before every Bash call. It stays silent for commands that do not delete anything. For any `rm` (or `git rm`) it forces a permission prompt, except in two cases it considers safe: deleting `.md` files under `docs/progress/` or `docs/rework/` (the progress docs that `/update-docs` removes when closing a task), and deleting a file that the same command created through a redirection or `tee` (a temporary file). It splits compound commands and judges each segment; any doubt resolves to a prompt. Two things to know:
-
-- it needs `jq`; without it, the hook cannot read the command and lets everything through silently;
-- it must be registered as a `PreToolUse` hook on `Bash` in your settings, as `global/settings.example.json` shows.
-
-The project example has a second hook, `project-example/.claude/hooks/protected_commit_guard.py`, which asks before any commit that puts a protected file (translations, legal texts) into the commit, unless the command carries an approval token. Agents leave those files modified and unstaged, and the director commits them after reviewing them.
+The project example has a hook, `project-example/.claude/hooks/protected_commit_guard.py`, which asks before any commit that puts a protected file (translations, legal texts) into the commit, unless the command carries an approval token. Agents leave those files modified and unstaged, and the director commits them after reviewing them.
 
 ## 8. Optional preferences
 

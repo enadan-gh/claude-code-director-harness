@@ -59,10 +59,8 @@ cleanup at all, not even inside the files you touch. Whatever you see wrong outs
    - Files that a project hook protects (the project's CLAUDE.md or its local /commit command says
      which, e.g. localization files) **are not staged or committed**: leave them modified and
      UNSTAGED and list them in your report; the director commits them.
-   - If the project uses the pre-commit framework (or any hook that stashes unstaged changes), the
-     hook may stash and restore other people's changes. After each `git commit`, run
-     `git status --short` and check that the files that are not yours are still modified exactly as
-     they were; if not, **stop**, do not try to recover them or repeat the commit, and report it.
+   - Before every commit, run `git status --short` and check that only your own files go into it;
+     files that are not yours stay modified and untouched.
 4. **Final report** (12 lines max) for the director: files touched, commit hash, result of each
    verification, decisions taken alone with their reason, what you saw and deliberately left out
    (with `file:line`) and, if you stopped, why and what would be needed.

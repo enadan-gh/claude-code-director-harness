@@ -52,9 +52,9 @@ Cada entrada sigue el mismo formato: **Qué pasó → La regla → Por qué se r
 
 **Qué pasó.** Pasó más de una vez. El framework pre-commit guarda en un stash todos los cambios no preparados antes de un commit y los restaura después. Con ficheros a medio hacer de un worker en el árbol, cada commit del director los sacaba y los volvía a poner, y una restauración fallida los habría destruido.
 
-**La regla.** El director no hace commit mientras haya algún worker en marcha. Mientras tanto, sus cambios en el informe se acumulan en disco. Justo antes de cada commit ejecuta `git status --short` y comprueba que los únicos ficheros modificados son los suyos; si aparece cualquier otro, espera. Si hay que hacer commit del informe con un worker activo, primero se le pide al worker que haga commit de lo que tenga. Tampoco se hace commit durante una fase de pruebas manuales con el servidor de desarrollo arrancado.
+**La regla.** El director no hace commit mientras haya algún worker en marcha. Mientras tanto, sus cambios en el informe se acumulan en disco. Justo antes de cada commit ejecuta `git status --short` y comprueba que los únicos ficheros modificados son los suyos; si aparece cualquier otro, espera.
 
-**Por qué se resuelve así.** El stash es cómo funciona el framework pre-commit, y desactivarlo supondría saltarse los hooks, que está prohibido. Así que lo seguro es hacer commit solo cuando el árbol no contiene trabajo de nadie más. El informe en disco ya es la memoria; el commit es solo su copia remota y puede esperar.
+**Por qué se resuelve así.** Los ficheros a medio hacer de otro agente están en el mismo árbol, así que un commit en mal momento puede interferir con ellos. Lo seguro es hacer commit solo cuando el árbol no contiene trabajo de nadie más. El informe en disco ya es la memoria; el commit es solo su copia remota y puede esperar.
 
 ## 2026-11-09 — Cada petición al usuario se entiende por sí sola
 

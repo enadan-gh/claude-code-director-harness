@@ -67,7 +67,6 @@ every project; "project" pieces live in the project and are always written new f
 | `/commit` | `global/templates/commit.md` | Commit only the current task's files and push | Project, adapted from the template |
 | `/update-docs` | `global/templates/update-docs.md` | Close a task: check the code, update the docs, delete the progress doc | Project, adapted from the template |
 | Profiles | `project-example/.claude/skills/profile-*/SKILL.md` | Per-area roles with an edit scope (backend, frontend, planner, auditor, tester) | Project |
-| Delete guard hook | `global/hooks/rm-md-guard.sh` + `global/settings.example.json` | Asks before any deletion, except progress docs and temporary files the same command creates; deny rules for `rm -rf` | Global |
 | Protected-commit hook | `project-example/.claude/hooks/protected_commit_guard.py` + `project-example/.claude/settings.json` | Asks before committing files a compiler cannot check (translations, legal texts) | Project |
 | `/deploy` | `project-example/.claude/commands/deploy.md` | Evaluate, show the plan, deploy only after explicit consent | Project |
 | Optional preferences | `${CLAUDE_SKILL_DIR}/optional-rules.md` | Questions in chat vs the question tool, model per agent, Explore/web-fetch agents, testing policy, cleanup (Boy Scout) rule | Applied to the installed copies or the project's `CLAUDE.md` |
@@ -133,7 +132,7 @@ Use this to connect what they told you with the pieces. Quote their own words ba
 | "It doesn't do what I ask", "it misunderstands" | The director restates decisions and records them before any work starts; changes are sized (trivial, quick fix, needs a plan) and planned ones are approved first |
 | "It stops halfway", "it leaves TODOs" | The worker's no-stops flow; `/do-feature` (run the whole plan, no deferred scope) |
 | "It keeps asking for permission" | The command rules in the agents (no `cd`, one git operation per call) and permission settings |
-| "It deleted or broke something" | Git (undo anything); the delete guard hook and deny rules |
+| "It deleted or broke something" | Git (undo anything, see exactly what changed); the rule that agents delete nothing during a task and run every deletion at the end, from an inventory listed in their report |
 | "It changed my secrets / settings" | The env-file rule in `CLAUDE.md` (`project-example/CLAUDE.md`, rule 1) |
 | "It broke the translations / legal text" | The protected-commit hook |
 | "It deployed / published by accident" | Consent rules in `CLAUDE.md` and a consent-gated `/deploy` |
@@ -184,7 +183,6 @@ Even so, if the user only wants rules in a `CLAUDE.md` and no agents, that is a 
 | `/fix-bug` | Real bugs to diagnose in code they cannot read themselves | Static content with no logic |
 | `/commit` | They use git | No git |
 | `/update-docs` | They chose the progress-doc workflows | No progress docs |
-| Delete guard hook | The user allows Bash without prompts (for example `Bash` in the allow list, to avoid constant prompts), or wants to: it is the safety net for deletions. Explain it in one plain sentence: "even with commands allowed, the AI will ask you before deleting any file" | They stay on Claude Code's default permissions (every command already asks, so the hook adds nothing), or bash or `jq` are not available |
 | Protected-commit hook | Files a compiler cannot check (translations, legal texts) and git | No such files, or no git |
 | `/deploy` | They deploy by merging or pushing to deploy branches, or by a command that must never run by accident | They publish by hand, or there is nothing to deploy |
 | Optional preferences | Read the catalog and offer only the entries that matter to this person; ask about each in plain words | Entries about things they did not choose (testing policy without tests, quick-fixer model without a quick-fixer) |
@@ -206,7 +204,7 @@ Before writing anything, show the user:
   a faithful summary section by section for long ones (an installed agent with a preference
   applied: say exactly which lines change).
 - **What will need their action**: permission prompts for `~/.claude/` and `.claude/` (see step 5),
-  installing `jq`, merging settings.
+  merging settings.
 
 Then ask for an explicit yes. "Looks good", "go ahead" or similar is a yes; silence, a question or
 "maybe" is not. If they want changes, adjust and show the changed parts again.
@@ -282,7 +280,6 @@ it from `<repo>`, with consent. Mapping (same subfolders):
 | `global/skills/new-feature/SKILL.md` and `skills-index.md` | `~/.claude/skills/new-feature/` |
 | `global/commands/rework.md`, `do-feature.md`, `fix-bug.md` | `~/.claude/commands/` |
 | `global/templates/commit.md`, `update-docs.md` | `~/.claude/templates/` (only as sources for future projects) |
-| `global/hooks/rm-md-guard.sh` | `~/.claude/hooks/rm-md-guard.sh`, registered by merging `global/settings.example.json` into `~/.claude/settings.json` |
 | `optional/agents/Explore.md`, `optional/agents/web-fetch.md` | `~/.claude/agents/` |
 
 - **Apply the chosen optional preferences in the installed copies** (catalog entries b, c, e), never
@@ -291,8 +288,6 @@ it from `<repo>`, with consent. Mapping (same subfolders):
   differs and ask.
 - `skills-index.md` holds fake example entries: replace them with the skills the user really has
   installed (list `~/.claude/skills/`), or leave only the workflows section if they have none.
-- The delete guard needs `jq`; without it, the hook lets everything through silently. Check whether
-  `jq` is installed and say so.
 - **Before writing in `~/.claude/` or in the project's `.claude/`**, tell the user: "Claude Code
   protects these folders, so a permission prompt will appear for each write. That is expected;
   approve it if the file is the one we agreed on."
@@ -304,7 +299,7 @@ End with a short summary in the user's language:
 - What was created or changed, with full paths, grouped as project files and `~/.claude/` files.
 - What was deliberately left out, in one line, and that they can run `/init-harness` again later to
   add pieces.
-- Anything they still have to do (install `jq`, set up git, restart the session so new agents and
+- Anything they still have to do (set up git, restart the session so new agents and
   skills load).
 - **How to start:** open a session in the project, say "activate the director profile" and then tell
   it what you want, as you would tell a project manager.

@@ -56,20 +56,9 @@ Report rules:
   the director decides when it is worth it - after a recorded decision, a launch, a closed review
   or before a risk of compaction - and commits it in its own batches, with an explicit path and
   without mixing in workers' files.
-- **Hard rule: the director does NOT commit while a worker is running** (learned after the
-  incident happened more than once). If the project uses the pre-commit
-  framework (or any hook that stashes unstaged changes), the hook stashes EVERYTHING that is
-  modified and unstaged and restores it afterwards; if the tree holds a worker's half-done files,
-  every commit of the director takes them out and puts them back, and a failed restore destroys
-  them. Procedure: (1) edits to the report pile up in the file while there are active workers (the
-  report on disk is the memory; the commit is only its remote copy); (2) the director commits only
-  when **no** worker is running, and right before each `git commit` runs `git status --short` and
-  checks that the only modified or untracked files are its own - if any other one shows up, it
-  does not commit and waits; (3) if the report needs to be committed while a worker is active (risk
-  of compaction), the worker is first asked to commit what it has (`SendMessage`) and the commit
-  comes afterwards; (4) nor is anything committed during a manual testing phase with the
-  development server running. Launching a worker right after committing the report (as is already
-  done) is the correct sequence; what is forbidden is a commit between the launch and the delivery.
+- **Hard rule: do not commit while a worker is running; before every commit, run
+  `git status --short` and check that only your own files are modified.** Meanwhile, edits to the
+  report pile up on disk.
 
 ## Grounding: nothing generic
 
@@ -154,8 +143,9 @@ learned the hard way, from real failures:
    parallel is the director's exclusive responsibility (see Execution regime); the worker only
    receives the anti-collision instructions.
 8. **All deletions at the end, with an inventory.** A deletion (test data created for validation,
-   temporary threads/rows/files, branches, cleanup of any kind) can trigger a permission request
-   from the hook that leaves the worker stopped, waiting for someone who is not watching. That is
+   temporary threads/rows/files, branches, cleanup of any kind) can trigger a permission prompt
+   (from Claude Code itself or from any hook) that leaves the worker stopped, waiting for someone
+   who is not watching. That is
    why the brief orders: during the task NOTHING is deleted; the worker keeps an **inventory** of
    everything it has created that must disappear (what, where, how it is deleted) and runs those
    deletions in a **single final step**, right before the report, so that if something blocks, it

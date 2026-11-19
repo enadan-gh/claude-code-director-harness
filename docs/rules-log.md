@@ -52,9 +52,9 @@ Each entry follows the same format: **What happened → The rule → Why it is s
 
 **What happened.** It happened more than once. The pre-commit framework stashes every unstaged change before a commit and restores it afterwards. With a worker's half-done files in the tree, every commit of the director took them out and put them back, and a failed restore would destroy them.
 
-**The rule.** The director does not commit while any worker is running. Its edits to the report pile up on disk in the meantime. Right before every commit it runs `git status --short` and checks that the only modified files are its own; if anything else shows up, it waits. If the report must be committed while a worker is active, the worker is first asked to commit what it has. Nothing is committed during a manual testing phase with the development server running either.
+**The rule.** The director does not commit while any worker is running. Its edits to the report pile up on disk in the meantime. Right before every commit it runs `git status --short` and checks that the only modified files are its own; if anything else shows up, it waits.
 
-**Why it is solved this way.** The stash is how the pre-commit framework works, and disabling it would mean skipping the hooks, which is forbidden. So the safe move is to commit only when the tree holds nobody else's work. The report on disk is already the memory; the commit is only its remote copy, and it can wait.
+**Why it is solved this way.** Another agent's half-done files are in the same tree, so a commit at the wrong moment can interfere with them. The safe move is to commit only when the tree holds nobody else's work. The report on disk is already the memory; the commit is only its remote copy, and it can wait.
 
 ## 2026-11-09 — Every request to the user is self-contained
 
