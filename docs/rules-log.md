@@ -2,27 +2,27 @@
 
 [Versión en español](registro-de-reglas.md) · [Back to the README](../README.md)
 
-Most rules in this repository were born from a real failure: something went wrong, I understood why, and the rule is what stops it from happening again. Inside the skills and agents the rules appear without dates, because the model only needs the rule. This log keeps the history: when each rule appeared, what happened, and why it is solved the way it is.
+Most rules in this repository were born from a real failure: something went wrong, I understood why, and the rule is what stops it from happening again. Some did not come from a failure but follow from the way of working itself, and their entries say so. Inside the skills and agents the rules appear without dates, because the model only needs the rule. This log keeps the history: when each rule appeared, what happened, and why it is solved the way it is.
 
-Each entry follows the same format: **What happened → The rule → Why it is solved this way**. When I do not have the story of a rule written down, the entry says so and describes what the rule protects against instead.
+Each entry follows the same format: **What happened → The rule → Why it is solved this way**. When a rule has no incident behind it, the entry says so.
 
 ---
 
 ## 2026-09-23 — Launching a worker carries the commit authorization
 
-**What happened.** No specific incident is recorded for this rule. It protects against a worker stopping at the end of its task to ask for permission to commit, when nobody is watching.
+**What happened.** There was no incident; this follows from the way the model works. By the time the director launches an agent, I have already talked through and decided with the director what we are going to do. The agents it launches work under its supervision, so they may modify files and commit. What they may never do is merge into `main`, publish, touch production or anything of that kind.
 
-**The rule.** When the director launches a worker under the director profile, that counts as my authorization for the worker to commit and push its own work. Only push to `main`, merges, production and force operations stay reserved for my explicit consent.
+**The rule.** When the director launches a worker under the director profile, that counts as my authorization for the worker to commit and push its own work. Only push to `main`, merges, publishing, production and force operations stay reserved for my explicit consent.
 
 **Why it is solved this way.** The worker has to finish without stops. Git keeps the history, and the director reviews after the commit, on the real diff; a bad commit is reverted with a new one. Asking before each commit would add a stop without adding control.
 
 ## 2026-10-01 — The report is the director's, and it commits it without asking
 
-**What happened.** No specific incident is recorded for this rule. It protects the director's memory: a report that only exists on disk, uncommitted, can be lost, and a director that has to ask before each commit of the report either interrupts me or lets the report go stale.
+**What happened.** There was no incident. The report is not code: it is the director's own document, written by the director, so the director manages it. It is committed so that no information is lost: not after every sentence, every two minutes, and not a week without a commit either. And the director does not need to ask me each time; it is its report.
 
-**The rule.** The report is the director's responsibility. It decides when a commit is worth it (after a recorded decision, a launch, a closed review, or before a risk of compaction) and commits it in its own batches, with an explicit path, without mixing in workers' files.
+**The rule.** The report is the director's responsibility. It commits it when a part closes or when it makes sense, never so rarely that information could be lost. Typical moments are after a recorded decision, a launch, a closed review, or before a risk of compaction. It commits in its own batches, with an explicit path, without mixing in workers' files.
 
-**Why it is solved this way.** The report is the director's working document, not a deliverable for me to approve. Making it the director's own call keeps the remote copy up to date without adding prompts.
+**Why it is solved this way.** The report is the director's working document, not a deliverable for me to approve. Keeping the remote copy up to date is part of managing it, and it adds no prompts.
 
 ## 2026-10-01 — All deletions at the end, with an inventory
 
@@ -66,11 +66,11 @@ Each entry follows the same format: **What happened → The rule → Why it is s
 
 ## 2026-11-10 — Quick fixes go to the quick-fixer, never to the director
 
-**What happened.** No specific incident is recorded for this rule. It protects the director's context and keeps small fixes from growing.
+**What happened.** No incident as such. When the director applied quick fixes itself, every fix dirtied its context and made it bigger for no reason. I moved quick fixes to a separate agent to keep the director's context as clean as possible.
 
 **The rule.** The director does not apply quick fixes itself. It diagnoses, I approve, and a dedicated `quick-fixer` agent, on a cheaper model, applies the fix from a short brief, verifies it and commits it. The director reviews the diff afterwards, as with any worker.
 
-**Why it is solved this way.** A quick fix has a bounded scope, so a cheaper model is enough. And the director's context is what holds the thread of the whole stream; filling it with the details of each small fix makes it worse at its real job.
+**Why it is solved this way.** The director's context is what holds the thread of the whole stream; filling it with the details of each small fix makes it worse at its real job. The cheaper model comes second, and it is an optimization, not the reason: a quick fix has a bounded scope, so a cheaper model is enough.
 
 ## 2026-11-18 — Boy Scout only inside the worker's own files; none for the quick-fixer
 

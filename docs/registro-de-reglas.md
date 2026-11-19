@@ -2,27 +2,27 @@
 
 [English version](rules-log.md) · [Volver al README](../README.es.md)
 
-Casi todas las reglas de este repositorio nacieron de un fallo real: algo salió mal, entendí por qué y la regla es lo que impide que vuelva a pasar. Dentro de las skills y de los agentes las reglas aparecen sin fecha, porque al modelo solo le hace falta la regla. Este registro guarda la historia: cuándo apareció cada regla, qué pasó y por qué se resuelve así.
+Casi todas las reglas de este repositorio nacieron de un fallo real: algo salió mal, entendí por qué y la regla es lo que impide que vuelva a pasar. Algunas no nacieron de un fallo, sino que se desprenden de la propia forma de trabajar, y sus entradas lo dicen. Dentro de las skills y de los agentes las reglas aparecen sin fecha, porque al modelo solo le hace falta la regla. Este registro guarda la historia: cuándo apareció cada regla, qué pasó y por qué se resuelve así.
 
-Cada entrada sigue el mismo formato: **Qué pasó → La regla → Por qué se resuelve así**. Cuando no tengo apuntada la historia de una regla, la entrada lo dice y describe en su lugar contra qué protege.
+Cada entrada sigue el mismo formato: **Qué pasó → La regla → Por qué se resuelve así**. Cuando una regla no tiene detrás ningún incidente, la entrada lo dice.
 
 ---
 
 ## 2026-09-23 — Lanzar un worker lleva implícita la autorización de commit
 
-**Qué pasó.** No hay un incidente concreto registrado para esta regla. Protege contra un worker que, al final de su tarea, se para a pedir permiso para hacer commit cuando no hay nadie mirando.
+**Qué pasó.** No hubo ningún incidente; esto se desprende de cómo funciona el modelo. Cuando el director lanza a los agentes, yo ya he hablado y decidido con él lo que vamos a hacer. Los agentes que lanza trabajan bajo su supervisión, así que pueden modificar ficheros y hacer commit. Lo que nunca pueden hacer es mergear en `main`, publicar, tocar producción ni nada de ese estilo.
 
-**La regla.** Cuando el director lanza un worker con el perfil de director, eso cuenta como mi autorización para que el worker haga commit y push de su propio trabajo. Solo el push a `main`, los merges, producción y las operaciones forzadas siguen reservados a mi consentimiento explícito.
+**La regla.** Cuando el director lanza un worker con el perfil de director, eso cuenta como mi autorización para que el worker haga commit y push de su propio trabajo. Solo el push a `main`, los merges, la publicación, producción y las operaciones forzadas siguen reservados a mi consentimiento explícito.
 
 **Por qué se resuelve así.** El worker tiene que terminar sin paradas. Git guarda la historia y el director revisa después del commit, sobre el diff real; un commit malo se revierte con otro nuevo. Preguntar antes de cada commit añadiría una parada sin añadir control.
 
 ## 2026-10-01 — El informe es del director, y hace commit de él sin preguntar
 
-**Qué pasó.** No hay un incidente concreto registrado para esta regla. Protege la memoria del director: un informe que solo existe en disco, sin commit, se puede perder, y un director que tiene que preguntar antes de cada commit del informe o me interrumpe o deja que el informe se quede atrás.
+**Qué pasó.** No hubo ningún incidente. El informe no es código: es el documento propio del director, escrito por el director, así que lo gestiona el director. Se hace commit para no perder información: ni después de cada frase, es decir, cada dos minutos, ni una semana sin commit. Y el director no necesita preguntarme cada vez; es su informe.
 
-**La regla.** El informe es responsabilidad del director. Él decide cuándo merece la pena un commit (tras registrar una decisión, tras un lanzamiento, al cerrar una revisión o ante el riesgo de una compactación) y lo hace en sus propios lotes, con la ruta explícita y sin mezclar ficheros de los workers.
+**La regla.** El informe es responsabilidad del director. Hace commit de él cuando se cierra una parte o cuando tiene sentido, nunca tan de tarde en tarde que pueda perderse información. Momentos típicos son tras registrar una decisión, tras un lanzamiento, al cerrar una revisión o ante el riesgo de una compactación. Lo hace en sus propios lotes, con la ruta explícita y sin mezclar ficheros de los workers.
 
-**Por qué se resuelve así.** El informe es el documento de trabajo del director, no un entregable que yo tenga que aprobar. Dejarlo a su criterio mantiene al día la copia remota sin añadir peticiones de permiso.
+**Por qué se resuelve así.** El informe es el documento de trabajo del director, no un entregable que yo tenga que aprobar. Mantener al día la copia remota forma parte de gestionarlo y no añade peticiones de permiso.
 
 ## 2026-10-01 — Todos los borrados al final, con un inventario
 
@@ -66,11 +66,11 @@ Cada entrada sigue el mismo formato: **Qué pasó → La regla → Por qué se r
 
 ## 2026-11-10 — Los arreglos rápidos van al quick-fixer, nunca al director
 
-**Qué pasó.** No hay un incidente concreto registrado para esta regla. Protege el contexto del director y evita que los arreglos pequeños crezcan.
+**Qué pasó.** No hubo un incidente como tal. Cuando el director aplicaba él mismo los arreglos rápidos, cada arreglo ensuciaba su contexto y lo hacía más grande sin necesidad. Pasé los arreglos rápidos a un agente aparte para mantener el contexto del director lo más limpio posible.
 
 **La regla.** El director no aplica arreglos rápidos él mismo. Diagnostica, yo apruebo, y un agente `quick-fixer` dedicado, con un modelo más barato, aplica el arreglo a partir de un brief corto, lo verifica y hace commit. El director revisa el diff después, como con cualquier worker.
 
-**Por qué se resuelve así.** Un arreglo rápido tiene un alcance acotado, así que basta un modelo más barato. Y el contexto del director es lo que sostiene el hilo de toda la línea de trabajo; llenarlo con los detalles de cada arreglo pequeño lo hace peor en su verdadero trabajo.
+**Por qué se resuelve así.** El contexto del director es lo que sostiene el hilo de toda la línea de trabajo; llenarlo con los detalles de cada arreglo pequeño lo hace peor en su verdadero trabajo. El modelo más barato va en segundo lugar y es una optimización, no el motivo: un arreglo rápido tiene un alcance acotado, así que basta un modelo más barato.
 
 ## 2026-11-18 — Boy Scout solo dentro de los ficheros del worker; ninguno para el quick-fixer
 
