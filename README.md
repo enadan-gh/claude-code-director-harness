@@ -58,3 +58,7 @@ An interactive setup command that asks about the optional preferences and genera
 
 - [Guide](docs/guide.md): the roles, the report, a task's life, permissions, parallel directors and the optional preferences.
 - [Rules log](docs/rules-log.md): each rule with the failure that produced it and why it is solved the way it is.
+
+## License
+
+MIT — see [LICENSE](LICENSE).

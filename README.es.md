@@ -58,3 +58,7 @@ Está previsto un comando de instalación interactivo que pregunte por las prefe
 
 - [Guía](docs/guia.md): los roles, el informe, la vida de una tarea, los permisos, varios directores en paralelo y las preferencias opcionales.
 - [Registro de reglas](docs/registro-de-reglas.md): cada regla con el fallo que la originó y por qué se resuelve así.
+
+## Licencia
+
+MIT. Consulta el fichero [LICENSE](LICENSE).

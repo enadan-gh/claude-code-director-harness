@@ -30,7 +30,7 @@ The model-read files are published from the maintainer's daily copies in `~/.cla
 
 ## Content rules
 
-- **No personal data in tracked files**: no names, user names, emails, local paths (`C:\...`, `/home/...`), machine names, domains, or client/project names. Paths under `~/.claude/` are fine. The repo is public and the author is already identified by the repo itself.
+- **No personal data in tracked files**: no names, user names, emails, local paths (`C:\...`, `/home/...`), machine names, domains, or client/project names. Paths under `~/.claude/` are fine. The repo is public and the author is already identified by the repo itself. The single exception is the copyright holder's name in `LICENSE`: the maintainer chose to sign the license with his name.
 - **No dates or `rule of <date>` tags inside the published files.** Inside the skills a rule stands on its own; its history (date, incident, reason) lives in `docs/rules-log.md` and `docs/registro-de-reglas.md`.
 - Project-specific details in `project-example/` are always `<placeholders>`, never real values: it is a template each reader fills with their own stack.
 - **Check claims about Claude Code's behaviour** (built-in agents, permissions, settings, cache) against the official documentation before they go into a file. A draft once described an optional agent as overriding a built-in one, and the docs said otherwise.
