@@ -18,7 +18,7 @@ Each entry follows the same format: **What happened → The rule → Why it is s
 
 ## 2026-10-01 — The report is the director's, and it commits it without asking
 
-**What happened.** There was no incident. The report is not code: it is the director's own document, written by the director, so the director manages it. It is committed so that no information is lost: not after every sentence, every two minutes, and not a week without a commit either. And the director does not need to ask me each time; it is its report.
+**What happened.** There was no incident. The report is not code: it is the director's own document, written by the director, so the director manages it. It is committed so that no information is lost: not with every sentence or every two minutes, but never a week without a commit either. And the director does not need to ask me each time; it is its report.
 
 **The rule.** The report is the director's responsibility. It commits it when a part closes or when it makes sense, never so rarely that information could be lost. Typical moments are after a recorded decision, a launch, a closed review, or before a risk of compaction. It commits in its own batches, with an explicit path, without mixing in workers' files.
 

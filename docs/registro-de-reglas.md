@@ -18,7 +18,7 @@ Cada entrada sigue el mismo formato: **Qué pasó → La regla → Por qué se r
 
 ## 2026-10-01 — El informe es del director, y hace commit de él sin preguntar
 
-**Qué pasó.** No hubo ningún incidente. El informe no es código: es el documento propio del director, escrito por el director, así que lo gestiona el director. Se hace commit para no perder información: ni después de cada frase, es decir, cada dos minutos, ni una semana sin commit. Y el director no necesita preguntarme cada vez; es su informe.
+**Qué pasó.** No hubo ningún incidente. El informe no es código: es el documento propio del director, escrito por el director, así que lo gestiona el director. Se hace commit para no perder información: no hace falta con cada frase ni cada dos minutos, pero tampoco puede pasar una semana sin commit. Y el director no necesita preguntarme cada vez; es su informe.
 
 **La regla.** El informe es responsabilidad del director. Hace commit de él cuando se cierra una parte o cuando tiene sentido, nunca tan de tarde en tarde que pueda perderse información. Momentos típicos son tras registrar una decisión, tras un lanzamiento, al cerrar una revisión o ante el riesgo de una compactación. Lo hace en sus propios lotes, con la ruta explícita y sin mezclar ficheros de los workers.
 
