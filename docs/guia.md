@@ -132,7 +132,7 @@ Son decisiones que tomé para mí. Cada una es una opción; el motivo está ahí
 
 **(d) Boy Scout.** El `CLAUDE.md` del ejemplo de proyecto pide dejar el código más limpio de lo que estaba. Para los agentes acotados lo limito: el worker solo limpia dentro de los ficheros que ya toca por su tarea, y el quick-fixer no limpia nada. Lo que vean fuera va a su informe con `fichero:línea`, y el director me lo trae como decisión. El motivo: la definición del worker (no tocar nada fuera del brief) y el `CLAUDE.md` del proyecto (arregla cualquier desorden que encuentres) se contradecían, y esto lo resuelve. El diff del agente se queda en su tarea, que es lo que revisa el director, y lo que encuentra fuera me llega como decisión y no como un cambio que nadie ha pedido. Si quieres una limpieza más amplia, dale su propia tarea.
 
-El comando de instalación previsto preguntará por cada una de estas opciones.
+El comando `/init-harness` pregunta por cada una de estas opciones; el catálogo en el que se apoya es [`global/skills/init-harness/optional-rules.md`](../global/skills/init-harness/optional-rules.md).
 
 ## 9. Un punto abierto conocido
 

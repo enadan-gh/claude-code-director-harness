@@ -2,6 +2,8 @@
 
 [Read in English](README.md)
 
+> **Proyecto en desarrollo.** Este repositorio todavía se está dando forma y probando, así que puede cambiar. No acepta contribuciones (los issues y los pull requests están cerrados), pero eres libre de copiarlo y adaptarlo a tus necesidades; esa es la idea.
+
 Así es como trabajo con Claude Code. Desarrollo productos reales yo solo, con Claude Code dentro de VS Code, y unos amigos me preguntaron cómo lo organizo. En lugar de explicarlo una y otra vez, he dejado aquí los ficheros que uso de verdad, limpios de todo lo personal y con comentarios sobre por qué existe cada pieza.
 
 ## Qué es
@@ -52,7 +54,7 @@ Todo vive en un único **informe**: un fichero markdown en el proyecto con el co
 4. **Abre una sesión en el proyecto** y activa el director: «activate the director profile» o «director mode» (son las frases que lista la descripción de la skill; si quieres pedirlo en español, añádelas allí).
 5. **Dile lo que quieres**, como se lo dirías a un jefe de proyecto. Leerá el código, te preguntará lo que necesite para decidir y empezará a lanzar agentes.
 
-Está previsto un comando de instalación interactivo que pregunte por las preferencias opcionales y genere los ficheros.
+**Ruta guiada.** En lugar de copiar a mano, puedes dejar que Claude Code construya contigo tu propia versión: clona o descarga este repositorio, copia `global/skills/init-harness/` en `~/.claude/skills/`, abre Claude Code en tu proyecto y ejecuta `/init-harness`. Te explica el modelo, te hace unas cuantas preguntas, propone solo las piezas que encajan con tu proyecto y te muestra cada fichero antes de escribirlo (te preguntará dónde has clonado este repositorio).
 
 ## Para seguir leyendo
 
