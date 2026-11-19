@@ -2,7 +2,7 @@
 
 [Read in English](README.md)
 
-> **Proyecto en desarrollo.** Este repositorio todavía se está dando forma y probando, así que puede cambiar. No acepta contribuciones (los issues y los pull requests están cerrados), pero eres libre de copiarlo y adaptarlo a tus necesidades; esa es la idea.
+> **Proyecto en desarrollo.** Este repositorio todavía está tomando forma y en pruebas, así que puede cambiar. No acepta contribuciones (los issues y los pull requests están cerrados), pero eres libre de copiarlo y adaptarlo a tus necesidades; esa es la idea.
 
 Así es como trabajo con Claude Code. Desarrollo productos reales yo solo, con Claude Code dentro de VS Code, y unos amigos me preguntaron cómo lo organizo. En lugar de explicarlo una y otra vez, he dejado aquí los ficheros que uso de verdad, limpios de todo lo personal y con comentarios sobre por qué existe cada pieza.
 
