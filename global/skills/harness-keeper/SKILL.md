@@ -106,7 +106,7 @@ steps.
 
 ### Adding a piece left out at set-up
 
-The quick-fixer, profiles, the progress-doc workflows, `/fix-bug`, `/commit`, `/update-docs`, the
+Git, the quick-fixer, profiles, the progress-doc workflows, `/fix-bug`, `/commit`, `/update-docs`, the
 protected-commit hook, `/deploy`, the optional agents, or the director and worker for someone who
 chose only a `CLAUDE.md`. Read the piece's reference file in `<repo>` (the table in
 `<repo>/global/skills/init-harness/SKILL.md`, "The reference pieces", says which), and write it
@@ -114,6 +114,10 @@ adapted to the project by the rules of that skill's step 5 ("write the chosen pi
 there instead of working from memory. Never edit the files in `<repo>`. Then follow Adjust steps 6
 to 8, and add to the project's `CLAUDE.md` whatever the piece needs there (for example, removing
 the line that sends quick fixes to the worker once a quick-fixer is installed).
+
+Git (installing it, or starting to use it in the project) is added following the section "Git" of
+`<repo>/global/skills/init-harness/SKILL.md`; in the project's `CLAUDE.md`, the "No version control"
+section goes and the git rules come in.
 
 Removing a piece is the same in reverse: find every file that refers to it, show what changes in
 each, and update the sheet.

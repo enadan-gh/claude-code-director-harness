@@ -114,7 +114,9 @@ placeholders:
 
 - Existing `CLAUDE.md`, `AGENTS.md`, `.cursorrules` or similar, and an existing `.claude/` folder
   (settings, commands, skills, hooks). These hold rules they already chose: respect them.
-- Whether it is a git repository (a `.git` folder; `git -C <project> status` if git is installed).
+- Git, three things: whether git is installed on the machine (`git --version`), whether the project
+  is a git repository (a `.git` folder; `git -C <project> status`), and whether it has a remote
+  (`git -C <project> remote -v`). The section "Git" below says what to do with each case.
 - Stack and layout: `package.json`, `pyproject.toml`, `Makefile`, framework configs; separate areas
   (for example `backend/` and `frontend/`), or a single folder of pages.
 - Verification that already exists: scripts for build, lint, typecheck, tests; CI configs
@@ -137,7 +139,7 @@ Use this to connect what they told you with the pieces. Quote their own words ba
 | "It doesn't do what I ask", "it misunderstands" | The director restates decisions and records them before any work starts; changes are sized (trivial, quick fix, needs a plan) and planned ones are approved first |
 | "It stops halfway", "it leaves TODOs" | The worker's no-stops flow; `/do-feature` (run the whole plan, no deferred scope) |
 | "It keeps asking for permission" | The command rules in the agents (no `cd`, one git operation per call) and permission settings |
-| "It deleted or broke something" | Git (undo anything, see exactly what changed); the rule that agents delete nothing during a task and run every deletion at the end, from an inventory listed in their report |
+| "It deleted or broke something" | Git (undo anything, see exactly what changed), or without git the dated backup copy taken before each task; the rule that agents delete nothing during a task and run every deletion at the end, from an inventory listed in their report |
 | "It changed my secrets / settings" | The env-file rule in `CLAUDE.md` (`project-example/CLAUDE.md`, rule 1) |
 | "It broke the translations / legal text" | The protected-commit hook |
 | "It deployed / published by accident" | Consent rules in `CLAUDE.md` and a consent-gated `/deploy` |
@@ -146,25 +148,54 @@ Use this to connect what they told you with the pieces. Quote their own words ba
 
 If a pain has no piece here, say so honestly and propose a rule in their `CLAUDE.md` written for it.
 
-### If they do not use git
+### Git
 
-Explain in two or three plain sentences what git gives them, for example: "Git keeps a saved
-snapshot every time work is finished. With it you can undo anything, even days later, and see
-exactly what the AI changed, line by line. The director's review relies on that: it checks the real
-changes, not the AI's summary." Recommend it, offer to set it up as part of this work if they want,
-and **respect a no**.
+What you found in the project decides what you say:
 
-If they decline, the adaptation lives **only in the project's `CLAUDE.md`** (do not rewrite the
-global agents for it). Propose a short section like:
+- **Git installed and the project already uses it:** nothing to propose. Note whether it has a
+  remote: it changes the git rules of the project `CLAUDE.md` (step 5).
+- **Git installed, the project is not a repository:** recommend starting to use it in this folder.
+- **Git not installed:** explain what git is and what it gives them, and recommend installing it and
+  using it in this project. Offer to help them install it for their system, or to install it
+  yourself with their consent.
+
+You do not need a script to teach git: explain it in your own words, at the user's level, using
+the terms they already used. What matters here are these reasons:
+
+- They can undo anything, even days later, and see exactly what the AI changed, line by line.
+- The director's review relies on reading the real changes, not the agent's summary; git shows them
+  directly.
+- The alternative, backup copies, takes more and more disk space with every task and costs more
+  usage: comparing two whole copies of a file is more expensive for the model than reading the list
+  of changes git gives.
+
+**Say that it is local.** The history lives in a folder on their computer, inside the project: no
+account, nothing uploaded anywhere. Publishing the project to a remote (GitHub or another) is a
+separate decision for later, never part of this set-up.
+
+**Steer, do not push.** Make one clear recommendation with these reasons, in plain words. If they
+say yes, starting git in the folder (and installing it, if needed) goes in the list of what you will
+do in step 4 and is done in step 5, after their yes; git also needs a name and an email to record
+with each change, set locally and only as they give them. If they say no, accept it at once, do not
+raise it again during the set-up, and write in the harness sheet that git was left out and why, in
+their words: `harness-keeper` can set it up later if they change their mind.
+
+Without git, the adaptation lives **only in the project's `CLAUDE.md`** (do not rewrite the global
+agents for it). Propose a short section like this one, with the backups folder named in the user's
+language:
 
 ```markdown
 ## No version control
 
-This project does not use git. There are no commits, pushes or branches: skip every git step in
-agents and workflows. Each agent lists in its final report every file it created, changed or
-deleted. The director reviews a delivery by reading those files whole, not the agent's summary.
-Before a task that changes many files, the director reminds the user to make a backup copy of the
-project folder.
+This project does not use git: there are no commits, pushes or branches, so skip every git step in
+agents and workflows.
+
+- Before launching a task, the director copies the files the task will change into a dated folder
+  inside `backups/` (for example `backups/<date>-<task>/`). The user can go back to that copy.
+- Each agent lists in its final report every file it created, changed or deleted.
+- The director reviews a delivery by comparing each changed file with its copy, not by reading the
+  agent's summary.
+- `backups/` stays out of whatever is published or deployed.
 ```
 
 Without git, `/commit`, the protected-commit hook and `/deploy` (as written in the reference) do not
@@ -187,7 +218,7 @@ wants rules in a `CLAUDE.md` and no agents, that is a valid answer.
 | Profiles | The project has clearly separate areas (backend/frontend, app/infra) or they want a read-only auditor or a planner role | A single area or a small project: one role is enough |
 | Progress-doc workflows (`new-feature`, `rework`, `do-feature`) | Features that span several steps or sessions, and project docs that must stay in sync | Small projects where a task fits in one go; the brief is already the plan |
 | `/fix-bug` | Real bugs to diagnose in code they cannot read themselves | Static content with no logic |
-| `/commit` | They use git | No git |
+| `/commit` | The project uses git, with or without a remote (without one, it commits and does not push) | No git |
 | `/update-docs` | They chose the progress-doc workflows | No progress docs |
 | Protected-commit hook | Files a compiler cannot check (translations, legal texts) and git | No such files, or no git |
 | `/deploy` | They deploy by merging or pushing to deploy branches, or by a command that must never run by accident | They publish by hand, or there is nothing to deploy |
@@ -254,7 +285,8 @@ and test commands, or, if there are none, what verification means here); where d
 with the user when the stream starts; for a user without git or a very simple project a simpler
 folder such as `docs/` is fine: pick it with the user and write it down, the director needs to
 know); language of answers; git and consent rules (or the no-git
-section); and, if chosen, the profiles and the progress-doc workflows. Preferences such as a testing
+section; when the repository has no remote, the git rules say that agents commit and do not push);
+and, if chosen, the profiles and the progress-doc workflows. Preferences such as a testing
 policy or the cleanup rule are not set here: the user sets them later with `harness-keeper`. One
 line says that the director workflow is available and how to activate it.
 
@@ -276,7 +308,7 @@ language. It is the project's record of its own harness: the onboarding reads it
 - Where the reference copy of the repository (`<repo>`) is on this machine, as a full path.
 - What goes wrong for them today with AI, in their own words.
 - The pieces chosen, each with why (the pain it answers).
-- The pieces left out, each with why.
+- The pieces left out, each with why (git included, if they declined it).
 - **First task**: the task agreed in step 3, in one or two sentences, and its status (pending).
 
 **Profiles.** One per real area, from the matching example in `project-example/.claude/skills/`,
@@ -334,7 +366,8 @@ End with a short summary in the user's language:
 - **Their helper from now on:** present `harness-keeper` by name. They can call it at any time, in
   any session, in their own words: to ask how something works or how to do something, and to change
   the harness when it does not fit how they work. `/harness-keeper` also works.
-- Anything they still have to do (for example, set up git).
+- Anything they still have to do (for example, finish installing git if they chose to install it
+  themselves).
 - **What comes next:** open a new session in the project and ask it to start the onboarding, in
   their own words (`/harness-onboarding` also works). Give the reason in plain words: the new session starts with the project's
   new `CLAUDE.md` already loaded and a clean context, and it picks up from what was just written
