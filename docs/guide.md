@@ -135,7 +135,7 @@ These are choices I made for myself. Each one is an option; the reason is there 
 
 **(d) Boy Scout.** The project example's `CLAUDE.md` asks to leave the code cleaner than you found it. For bounded agents I limit that: the worker cleans up only inside the files it already touches for its task, and the quick-fixer does no cleanup at all. Anything they see outside goes into their report with `file:line`, and the director brings it to me as a decision. The reason: the worker definition (touch nothing outside the brief) and the project's `CLAUDE.md` (fix any mess you stumble upon) contradicted each other, and this settles it. The agent's diff stays on its task, which is what the director reviews, and what it finds outside reaches me as a decision instead of a change nobody asked for. If you want broader cleanup, give it its own task.
 
-The `/init-harness` command asks about each of these options; the catalog it works from is [`global/skills/init-harness/optional-rules.md`](../global/skills/init-harness/optional-rules.md).
+The guided route is three skills: `init-harness` sets the harness up, `harness-onboarding` runs a first task with you, and `harness-keeper` answers how things work and makes the later adjustments. These options are set with `harness-keeper` ("adjust the harness"), which offers each one when what you tell it touches it, or when you ask what can be tuned; the catalog it works from is [`global/skills/harness-keeper/optional-rules.md`](../global/skills/harness-keeper/optional-rules.md).
 
 ## 9. A known open point
 
