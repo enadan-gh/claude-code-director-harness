@@ -116,8 +116,8 @@ Cover:
 3. **Alone or in a team**, and whether other people or tools also edit the project.
 4. **What goes wrong today** when they work with AI. Ask for concrete stories ("last time it went
    wrong, what happened?"). This is the most important question: every piece you propose later should
-   answer one of these pains. Do not ask whether cost or usage worries them: everyone says yes, so
-   the answer tells you nothing; if they bring it up themselves, its row in the pain table applies.
+   answer one of these pains. Cost and usage come into the interview only when they bring them up;
+   then its row in the pain table applies.
 5. Only if relevant after the above: how they test that things work, how they publish or deploy
    (always, if the project is something they publish, such as a site), and whether there are files
    that must never be touched (secrets, translations, legal texts).
