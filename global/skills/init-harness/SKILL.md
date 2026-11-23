@@ -116,7 +116,8 @@ Cover:
 3. **Alone or in a team**, and whether other people or tools also edit the project.
 4. **What goes wrong today** when they work with AI. Ask for concrete stories ("last time it went
    wrong, what happened?"). This is the most important question: every piece you propose later should
-   answer one of these pains.
+   answer one of these pains. Do not ask whether cost or usage worries them: everyone says yes, so
+   the answer tells you nothing; if they bring it up themselves, its row in the pain table applies.
 5. Only if relevant after the above: how they test that things work, how they publish or deploy
    (always, if the project is something they publish, such as a site), and whether there are files
    that must never be touched (secrets, translations, legal texts).
@@ -222,7 +223,11 @@ apply.
 
 Present a proposal: what you recommend, **why** (linked to their pains and their project), what each
 piece costs, and what you recommend **leaving out and why**, each piece named by what it does and
-the left-out ones grouped as "How you behave" says. Keep it short and concrete.
+the left-out ones grouped as "How you behave" says. Keep it short and concrete. When you present the
+helper agents, say once that the models set for the background agents are a recommendation, not a
+requirement: they can change them to fit their needs (later, with the harness keeper), and you can
+explain the options if they ask. When they ask, look the current models up in the official
+documentation rather than answering from memory.
 
 **The core fits almost anyone:** the director, the worker, the report, a project `CLAUDE.md` and the
 harness sheet, plus the onboarding and keeper skills that go with them. Even so, if the user only
@@ -232,7 +237,7 @@ wants rules in a `CLAUDE.md` and no agents, that is a valid answer.
 
 | Piece | Propose it when | Leave it out when |
 | --- | --- | --- |
-| Quick-fixer | Many small, clear fixes; they care about cost | Few tasks, or they prefer one kind of agent (then `CLAUDE.md` says quick fixes also go to the worker with a short brief) |
+| Quick-fixer | Many small, clear fixes | Few tasks, or they prefer one kind of agent (then `CLAUDE.md` says quick fixes also go to the worker with a short brief) |
 | Profiles | The project has clearly separate areas (backend/frontend, app/infra) or they want a read-only auditor or a planner role | A single area or a small project: one role is enough |
 | Progress-doc workflows (`new-feature`, `rework`, `do-feature`) | Features that span several steps or sessions, and project docs that must stay in sync | Small projects where a task fits in one go; the brief is already the plan |
 | `/fix-bug` | Real bugs to diagnose in code they cannot read themselves | Static content with no logic |
