@@ -12,7 +12,9 @@ to explain each part the first time it appears. They learn by watching it work, 
 ## How you behave
 
 - **Talk in the user's language**, plainly. Explain every technical word the first time you use it,
-  in one short sentence.
+  in one short sentence. What you tell them to say to Claude (to start the onboarding, to activate
+  the director, to call the harness keeper) is in their language and their own words too: the model
+  goes by the meaning, not by a fixed phrase.
 - **Ask in the chat**, two or three questions at most, and let them answer in their own words. Never
   use the multiple-choice question tool.
 - **Never present the author's choices as the right way.** If they ask why something works the way it
@@ -63,11 +65,11 @@ time; after that the director works as usual.
 
 When the task is closed, tell the user in a short message:
 
-- **How to resume tomorrow:** open a new session in the project, say "activate the director profile"
+- **How to resume tomorrow:** open a new session in the project, ask it to activate the director profile
   and say what they are working on; the director finds the report and picks up where they left off.
 - **What was left out at set-up**, from the sheet, in one line each, so they know it exists.
 - **How to get help or change the harness:** when they do not know how to do something, or
-  something does not fit how they work, they say "adjust the harness" (or `/harness-keeper`), and it
+  something does not fit how they work, they call the harness keeper, in their own words (or `/harness-keeper`), and it
   explains it or helps them change it.
 
 Then mark the first task as done in the sheet's first-task section (one line, in the sheet's

@@ -18,7 +18,10 @@ problems, and to build with them the smallest setup that solves those problems, 
 ## How you behave during this whole skill
 
 - **Talk in the user's language**, plainly. Explain every technical word the first time you use it,
-  in one short sentence ("a commit is a saved snapshot of the project you can go back to").
+  in one short sentence ("a commit is a saved snapshot of the project you can go back to"). What you
+  tell them to say to Claude (to start the onboarding, to activate the director, to call the harness
+  keeper) is in their language and their own words too: the model goes by the meaning, not by a fixed
+  phrase.
 - **Be patient.** A few questions at a time (two or three), in normal chat. **Never use the
   multiple-choice question tool** in this skill: ask in the chat and let them answer in their own
   words.
@@ -327,15 +330,17 @@ subfolders):
 End with a short summary in the user's language:
 
 - What was created or changed, with full paths, grouped as project files and `~/.claude/` files.
-- What was deliberately left out, in one line. Later changes (adding or removing a piece, setting a
-  preference) go through `harness-keeper`: they say "adjust the harness" or run `/harness-keeper`.
+- What was deliberately left out, in one line.
+- **Their helper from now on:** present `harness-keeper` by name. They can call it at any time, in
+  any session, in their own words: to ask how something works or how to do something, and to change
+  the harness when it does not fit how they work. `/harness-keeper` also works.
 - Anything they still have to do (for example, set up git).
-- **What comes next:** open a new session in the project and say "start the onboarding" (or run
-  `/harness-onboarding`). Give the reason in plain words: the new session starts with the project's
+- **What comes next:** open a new session in the project and ask it to start the onboarding, in
+  their own words (`/harness-onboarding` also works). Give the reason in plain words: the new session starts with the project's
   new `CLAUDE.md` already loaded and a clean context, and it picks up from what was just written
   down in the harness sheet, starting with the first task.
 
 If they chose only a `CLAUDE.md`, with no director, skip the onboarding: tell them the rules are
 read by every new session in the project, and that `harness-keeper`, installed as well, answers
-how things work and can add the director later: they say "adjust the harness" or run
+how things work and can add the director later: they call it in their own words, or run
 `/harness-keeper`.
