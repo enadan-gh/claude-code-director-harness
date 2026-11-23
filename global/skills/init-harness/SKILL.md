@@ -83,8 +83,10 @@ relevant part when the user asks "why".
 
 ## Step 1: explain the model (a few lines)
 
-Before asking anything, explain in plain words, adapted to the user's language and level. Something
-like:
+Before asking anything, give this explanation once, in plain words, adapted to the user's language
+and level; if it was already given in this session (the repository's agent instructions ask for it
+before the skill starts), go straight to what comes after it (one person's way of working, the
+guided first task, how this will go). Something like:
 
 > "Instead of asking the AI for things and checking every result yourself, you talk to it the way you
 > would to a project manager. You tell it what you want, you decide together, and it hands the work
