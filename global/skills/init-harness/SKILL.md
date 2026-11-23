@@ -1,6 +1,6 @@
 ---
 name: init-harness
-description: Helps the user build their OWN director/worker harness for the project open in this session, through a plain-language interview. Explains the model, asks about the project, the user's experience and what goes wrong today with AI, proposes only the pieces that fit (and says why the others do not), shows every file before writing it and writes adapted versions using the claude-code-director-harness repository as worked examples, never as forms to fill in. Use when the user runs /init-harness or asks to set up, adapt, initialise or install the director harness (director, worker, report, CLAUDE.md, workflows, hooks) in a project.
+description: Helps the user build their OWN director/worker harness for the project open in this session, through a plain-language interview. Explains the model, asks about the project, the user's experience and what goes wrong today with AI, proposes only the pieces that fit (and says why the others do not), shows every file before writing it and writes adapted versions using the claude-code-director-harness repository as worked examples, never as forms to fill in, plus a harness sheet (docs/harness.md) with a first task for the onboarding. Use when the user runs /init-harness or asks to set up, adapt, initialise or install the director harness (director, worker, report, CLAUDE.md, workflows, hooks) in a project.
 ---
 
 # Init harness
@@ -47,9 +47,6 @@ You need the cloned `claude-code-director-harness` repository to read the exampl
    tell them that this skill needs it next to it and wait; do not reconstruct the files from memory.
 3. Remember the path as `<repo>` for the rest of the session.
 
-The optional rules catalog lives next to this file: `${CLAUDE_SKILL_DIR}/optional-rules.md`. If it
-is not there (the user copied only `SKILL.md`), read `<repo>/global/skills/init-harness/optional-rules.md`.
-
 ## The reference pieces
 
 Read a piece's reference file before you propose it, so that you explain it from what it really
@@ -60,6 +57,9 @@ every project; "project" pieces live in the project and are always written new f
 | --- | --- | --- | --- |
 | Director | `global/skills/profile-director/SKILL.md` | The session the user talks to: plans and decides with them, writes briefs, launches helper agents in the background, reviews their work against what really changed, keeps the report | Global |
 | Worker | `global/agents/worker.md` | Helper agent that executes one task from a brief, end to end, and reports back | Global |
+| Onboarding | `global/skills/harness-onboarding/SKILL.md` | In the next session, runs the first task with the director and explains each part the first time it appears | Global |
+| Harness keeper | `global/skills/harness-keeper/` | Later adjustments to the harness: adding or removing pieces, setting preferences; keeps the harness sheet up to date | Global |
+| Harness sheet | Described in step 5 ("Harness sheet") | `docs/harness.md`: the project's record of its own harness (what goes wrong, pieces chosen and left out and why, the first task). Read by the onboarding and the keeper | Project |
 | Report | Described in the director skill ("The report") and `docs/guide.md` section 2 | One markdown file per stream of work: decisions with the user's reasons, task queue, session log, test script. The director's memory between sessions | Created by the director when a stream starts, in `docs/director-streams/` (or the folder the project's `CLAUDE.md` names), with a name agreed with the user |
 | Project `CLAUDE.md` | `project-example/CLAUDE.md` | The project's rules, read by every session and agent: what the project is, what must never happen, how changes are sized, how to verify, where docs live, git rules | Project |
 | Quick-fixer | `global/agents/quick-fixer.md` | Cheaper helper agent for small fixes the director already diagnosed and the user approved | Global |
@@ -69,7 +69,6 @@ every project; "project" pieces live in the project and are always written new f
 | Profiles | `project-example/.claude/skills/profile-*/SKILL.md` | Per-area roles with an edit scope (backend, frontend, planner, auditor, tester) | Project |
 | Protected-commit hook | `project-example/.claude/hooks/protected_commit_guard.py` + `project-example/.claude/settings.json` | Asks before committing files a compiler cannot check (translations, legal texts) | Project |
 | `/deploy` | `project-example/.claude/commands/deploy.md` | Evaluate, show the plan, deploy only after explicit consent | Project |
-| Optional preferences | `${CLAUDE_SKILL_DIR}/optional-rules.md` | Questions in chat vs the question tool, model per agent, Explore/web-fetch agents, testing policy, cleanup (Boy Scout) rule | Applied to the installed copies or the project's `CLAUDE.md` |
 
 `docs/guide.md` and `docs/rules-log.md` in `<repo>` explain why each piece exists; read the
 relevant part when the user asks "why".
@@ -85,6 +84,9 @@ like:
 > the helper says it changed, and tells you. It also keeps a written **report** in your project, so
 > nothing is forgotten between sessions: tomorrow you open a new session, tell it what you are working
 > on, and it finds that report and picks up where you left off. This is one person's way of working; we'll take only what helps you."
+
+Add one sentence: after the set-up, a guided first task, on something they actually want done,
+shows all this working.
 
 Then say how this will go: a few questions, a proposal, they see every file before anything is
 written, and nothing is written without their yes.
@@ -136,7 +138,7 @@ Use this to connect what they told you with the pieces. Quote their own words ba
 | "It changed my secrets / settings" | The env-file rule in `CLAUDE.md` (`project-example/CLAUDE.md`, rule 1) |
 | "It broke the translations / legal text" | The protected-commit hook |
 | "It deployed / published by accident" | Consent rules in `CLAUDE.md` and a consent-gated `/deploy` |
-| "It's expensive", "I run out of usage" | Model per agent (catalog entry b), quick-fixer on a cheaper model, resuming from the report instead of an old long chat |
+| "It's expensive", "I run out of usage" | Model per agent (a preference they set later with `harness-keeper`), quick-fixer on a cheaper model, resuming from the report instead of an old long chat |
 | "I lose track of what was done" | The report's task queue and its cumulative test script |
 
 If a pain has no piece here, say so honestly and propose a rule in their `CLAUDE.md` written for it.
@@ -170,8 +172,9 @@ apply.
 Present a proposal: what you recommend, **why** (linked to their pains and their project), what each
 piece costs, and what you recommend **leaving out and why**. Keep it short and concrete.
 
-**The core fits almost anyone:** the director, the worker, the report and a project `CLAUDE.md`.
-Even so, if the user only wants rules in a `CLAUDE.md` and no agents, that is a valid answer.
+**The core fits almost anyone:** the director, the worker, the report, a project `CLAUDE.md` and the
+harness sheet, plus the onboarding and keeper skills that go with them. Even so, if the user only
+wants rules in a `CLAUDE.md` and no agents, that is a valid answer.
 
 **Everything else is conditional.** Criteria:
 
@@ -185,14 +188,17 @@ Even so, if the user only wants rules in a `CLAUDE.md` and no agents, that is a 
 | `/update-docs` | They chose the progress-doc workflows | No progress docs |
 | Protected-commit hook | Files a compiler cannot check (translations, legal texts) and git | No such files, or no git |
 | `/deploy` | They deploy by merging or pushing to deploy branches, or by a command that must never run by accident | They publish by hand, or there is nothing to deploy |
-| Optional preferences | Read the catalog and offer only the entries that matter to this person; ask about each in plain words | Entries about things they did not choose (testing policy without tests, quick-fixer model without a quick-fixer) |
 
 A useful sanity check: a static landing page might only need the director, the worker, a short
 `CLAUDE.md` and, with git, a simple `/commit`. A backend + frontend product with CI may need most
 of the pieces. Say this out loud when it helps the user calibrate.
 
-Go through the catalog's entries that apply (see `optional-rules.md`) and ask the user's choice for
-each, with both reasons.
+### Agree the first task
+
+Agree with the user one small, real task taken from what they said in the interview: something they
+actually want done, that fits in one go (a fix they mentioned, a small page, a change they keep
+postponing). Say it back in one sentence and ask for their OK. It goes in the harness sheet's
+"First task" section, and the onboarding runs it in the next session.
 
 ## Step 4: show what you will write, and wait for a yes
 
@@ -201,8 +207,10 @@ Before writing anything, show the user:
 - **The list of files**, each with its full path and whether it is new, an addition to an existing
   file, or an installed copy.
 - **The content**: the full text for short files (`CLAUDE.md` of a small project, a short `/commit`),
-  a faithful summary section by section for long ones (an installed agent with a preference
-  applied: say exactly which lines change).
+  a faithful summary section by section for long ones (an installed global piece: say whether it is
+  an exact copy or exactly which lines change).
+- **The harness sheet** (`docs/harness.md`), in full: it is short, and it is the record of what you
+  agreed.
 - **What will need their action**: permission prompts for `~/.claude/` and `.claude/` (see step 5),
   merging settings.
 
@@ -243,13 +251,29 @@ and test commands, or, if there are none, what verification means here); where d
 with the user when the stream starts; for a user without git or a very simple project a simpler
 folder such as `docs/` is fine: pick it with the user and write it down, the director needs to
 know); language of answers; git and consent rules (or the no-git
-section); and, if chosen, the profiles, the progress-doc workflows, the testing policy and the
-cleanup rule. One line says that the director workflow is available and how to activate it.
+section); and, if chosen, the profiles and the progress-doc workflows. Preferences such as a testing
+policy or the cleanup rule are not set here: the user sets them later with `harness-keeper`. One
+line says that the director workflow is available and how to activate it.
+
+**Approvals.** When a rule asks for the user's approval (before a change, a deploy, a deletion),
+write it as addressed to the director: the director gets the approval before launching an agent.
+This file is also read by the background agents, which cannot wait for anyone, so nothing in it
+tells every reader to stop and wait for an OK.
 
 If they did **not** choose the quick-fixer, the `CLAUDE.md` says that quick fixes also go to the
 `worker` with a short brief (the director skill expects a `quick-fixer`; this line keeps it from
 stopping to ask). If they did **not** choose the workflow commands, it says that the brief is the
 plan and there are no workflow commands to run.
+
+**Harness sheet.** A permanent `docs/harness.md`, in the user's language and with headings in that
+language. It is the project's record of its own harness: the onboarding reads it, and
+`harness-keeper` reads it and keeps it up to date. Keep it short, in plain words:
+
+- What the project is, in one line.
+- What goes wrong for them today with AI, in their own words.
+- The pieces chosen, each with why (the pain it answers).
+- The pieces left out, each with why.
+- **First task**: the task agreed in step 3, in one or two sentences, and its status (pending).
 
 **Profiles.** One per real area, from the matching example in `project-example/.claude/skills/`,
 with the real folders, commands and conventions. Drop the planner, auditor or tester unless chosen.
@@ -272,20 +296,21 @@ placeholder file such as `.gitkeep`.
 ### Global pieces in `~/.claude/`
 
 Check which chosen global pieces are already in `~/.claude/`. For each missing one, offer to install
-it from `<repo>`, with consent. Mapping (same subfolders):
+it from `<repo>`, with consent. The onboarding and keeper skills are part of the core: they are
+installed together with the director and the worker. Mapping (same subfolders):
 
 | From `<repo>` | To |
 | --- | --- |
 | `global/skills/profile-director/SKILL.md` | `~/.claude/skills/profile-director/SKILL.md` |
 | `global/agents/worker.md` | `~/.claude/agents/worker.md` |
+| `global/skills/harness-onboarding/` | `~/.claude/skills/harness-onboarding/` |
+| `global/skills/harness-keeper/` | `~/.claude/skills/harness-keeper/` |
 | `global/agents/quick-fixer.md` | `~/.claude/agents/quick-fixer.md` |
 | `global/skills/new-feature/SKILL.md` and `skills-index.md` | `~/.claude/skills/new-feature/` |
 | `global/commands/rework.md`, `do-feature.md`, `fix-bug.md` | `~/.claude/commands/` |
 | `global/templates/commit.md`, `update-docs.md` | `~/.claude/templates/` (only as sources for future projects) |
-| `optional/agents/Explore.md`, `optional/agents/web-fetch.md` | `~/.claude/agents/` |
 
-- **Apply the chosen optional preferences in the installed copies** (catalog entries b, c, e), never
-  in `<repo>`.
+- Never edit the files in `<repo>`: adaptations go in the installed copies.
 - If a file with the same name already exists in `~/.claude/`, do not overwrite it: show what
   differs and ask.
 - `skills-index.md` holds fake example entries: replace them with the skills the user really has
@@ -299,10 +324,13 @@ it from `<repo>`, with consent. Mapping (same subfolders):
 End with a short summary in the user's language:
 
 - What was created or changed, with full paths, grouped as project files and `~/.claude/` files.
-- What was deliberately left out, in one line, and that they can run `/init-harness` again later to
-  add pieces.
-- Anything they still have to do (set up git, restart the session so new agents and
-  skills load).
-- **How to start:** open a session in the project, say "activate the director profile" and then tell
-  it what you want, as you would tell a project manager. For new work it proposes a name for the
-  stream's report; later sessions find that report by what the user says they are working on.
+- What was deliberately left out, in one line. Later changes (adding or removing a piece, setting a
+  preference) go through `harness-keeper`: they say "adjust the harness" or run `/harness-keeper`.
+- Anything they still have to do (for example, set up git).
+- **What comes next:** open a new session in the project and say "start the onboarding" (or run
+  `/harness-onboarding`). Give the reason in plain words: the new session starts with the project's
+  new `CLAUDE.md` already loaded and a clean context, and it picks up from what was just written
+  down in the harness sheet, starting with the first task.
+
+If they chose only a `CLAUDE.md`, with no director, skip the onboarding: tell them the rules are
+read by every new session in the project, and that `harness-keeper` can add the director later.
