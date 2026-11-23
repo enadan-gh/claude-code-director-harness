@@ -35,9 +35,10 @@ done, that fits in one go.
 
 ## Step 2: say what is about to happen
 
-In two or three plain sentences, for example: "We are going to do a real task now: <the first task>.
-It will be done exactly the way every task will be done from now on. The first time each part
-appears, I will explain it in a sentence or two."
+Two or three plain sentences, for example: "We are going to do a real task now: <the first task>,
+the way every task will be done from now on, and I will explain each part as it happens." With a
+user who is not technical, add once that between your messages they will see technical lines go by
+(commands, file names, output): that is you working, and they only need to read your messages.
 
 ## Step 3: run the first task as the director
 
@@ -48,8 +49,9 @@ agree another small, real one.
 
 ## Step 4: explain each thing the first time it happens
 
-The first time each of these happens, add one or two plain sentences and show it. Only the first
-time; after that the director works as usual.
+The first time each of these happens, add one or two plain sentences and show it. Each explanation
+is given once, at that moment: not announced beforehand and not recapped at the end. After that the
+director works as usual.
 
 | When | What to explain and show |
 | --- | --- |
@@ -63,11 +65,13 @@ time; after that the director works as usual.
 
 ## Step 5: close
 
-When the task is closed, tell the user in a short message:
+When the task is closed, tell the user in a few lines, without repeating what was already explained:
 
 - **How to resume tomorrow:** open a new session in the project, ask it to activate the director profile
   and say what they are working on; the director finds the report and picks up where they left off.
-- **What was left out at set-up**, from the sheet, in one line each, so they know it exists.
+- **What was left out at set-up**, from the sheet, so they know it exists: to someone who does not
+  program, one sentence for the whole group and its reason, not a list of commands; to a developer,
+  the groups with their reasons.
 - **How to get help or change the harness:** when they do not know how to do something, or
   something does not fit how they work, they call the harness keeper, in their own words (or `/harness-keeper`), and it
   explains it or helps them change it.

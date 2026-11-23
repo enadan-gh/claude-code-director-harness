@@ -1,6 +1,6 @@
 ---
 name: init-harness
-description: Helps the user build their OWN director/worker harness for the project open in this session, through a plain-language interview. Explains the model, asks about the project, the user's experience and what goes wrong today with AI, proposes only the pieces that fit (and says why the others do not), shows every file before writing it and writes adapted versions using the claude-code-director-harness repository as worked examples, never as forms to fill in, plus a harness sheet (docs/harness.md) with a first task for the onboarding. Use when the user runs /init-harness or asks to set up, adapt, initialise or install the director harness (director, worker, report, CLAUDE.md, workflows, hooks) in a project.
+description: Helps the user build their OWN director/worker harness for the project open in this session, through a plain-language interview. Explains the model, asks about the project, the user's experience and what goes wrong today with AI, proposes only the pieces that fit (and says why the others do not), shows what it will write before writing it and writes adapted versions using the claude-code-director-harness repository as worked examples, never as forms to fill in, plus a harness sheet (docs/harness.md) with a first task for the onboarding. Use when the user runs /init-harness or asks to set up, adapt, initialise or install the director harness (director, worker, report, CLAUDE.md, workflows, hooks) in a project.
 ---
 
 # Init harness
@@ -22,6 +22,11 @@ problems, and to build with them the smallest setup that solves those problems, 
   tell them to say to Claude (to start the onboarding, to activate the director, to call the harness
   keeper) is in their language and their own words too: the model goes by the meaning, not by a fixed
   phrase.
+- **Name each piece by what it does for them.** Give its internal name only when they will need to
+  say it or recognise it (the director, the harness keeper); file, command and agent names are for
+  someone who works with them. For the pieces left out: to someone who does not program, one sentence
+  for the whole group and its reason ("I am leaving out the pieces meant for larger programming
+  projects"), not a list of commands; to a developer, the list with a reason for each.
 - **Be patient.** A few questions at a time (two or three), in normal chat. **Never use the
   multiple-choice question tool** in this skill: ask in the chat and let them answer in their own
   words.
@@ -81,18 +86,22 @@ relevant part when the user asks "why".
 Before asking anything, explain in plain words, adapted to the user's language and level. Something
 like:
 
-> "The idea is simple. You talk to one Claude session, the **director**. It plans with you and asks
-> you only for decisions. When something is decided, it hands the work to **helper agents** that run
-> in the background. When a helper finishes, the director checks what was actually changed, not what
-> the helper says it changed, and tells you. It also keeps a written **report** in your project, so
-> nothing is forgotten between sessions: tomorrow you open a new session, tell it what you are working
-> on, and it finds that report and picks up where you left off. This is one person's way of working; we'll take only what helps you."
+> "Instead of asking the AI for things and checking every result yourself, you talk to it the way you
+> would to a project manager. You tell it what you want, you decide together, and it hands the work
+> to other AI agents, which do it while you keep talking. When they finish, it checks what they really
+> changed before telling you. And it writes everything down in a document inside your project: what
+> you decided, what is done and what is left. So tomorrow you open a new chat and it picks up where
+> you left off. We call that role the 'director'."
 
-Add one sentence: after the set-up, a guided first task, on something they actually want done,
-shows all this working.
+Add that this is one person's way of working and you will take only what helps them, and one
+sentence more: after the set-up, a guided first task, on something they actually want done, shows
+all this working.
 
-Then say how this will go: a few questions, a proposal, they see every file before anything is
-written, and nothing is written without their yes.
+Then say how this will go: a few questions, a proposal, a summary of what will be written before
+anything is written (any file in full if they ask), and nothing is written without their yes. With a
+user who is not technical (if you cannot tell yet, as soon as you can), say once that between your
+messages they will see technical lines go by (commands, file names, output): that is you working,
+and they only need to read your messages.
 
 ## Step 2: interview and look at the project
 
@@ -106,8 +115,9 @@ Cover:
 4. **What goes wrong today** when they work with AI. Ask for concrete stories ("last time it went
    wrong, what happened?"). This is the most important question: every piece you propose later should
    answer one of these pains.
-5. Only if relevant after the above: how they test that things work, how they publish or deploy, and
-   whether there are files that must never be touched (secrets, translations, legal texts).
+5. Only if relevant after the above: how they test that things work, how they publish or deploy
+   (always, if the project is something they publish, such as a site), and whether there are files
+   that must never be touched (secrets, translations, legal texts).
 
 While they answer, **look at the project** (read-only) to ask better questions, never to fill
 placeholders:
@@ -126,6 +136,11 @@ placeholders:
 
 Tell the user briefly what you found ("I see a backend and a frontend, a test suite and GitHub
 Actions; no CLAUDE.md yet") and ask about anything that surprised you.
+
+**Keep the harness out of what is published.** If the way they publish would also publish the
+harness files (for example, uploading the whole project folder to a host), say so and propose keeping
+the site in its own subfolder, or another way of leaving `CLAUDE.md`, `docs/` and `.claude/` out.
+Decide it with them before step 4: it changes where files go.
 
 ### Map each pain to the piece that addresses it
 
@@ -204,7 +219,8 @@ apply.
 ## Step 3: propose which pieces fit
 
 Present a proposal: what you recommend, **why** (linked to their pains and their project), what each
-piece costs, and what you recommend **leaving out and why**. Keep it short and concrete.
+piece costs, and what you recommend **leaving out and why**, each piece named by what it does and
+the left-out ones grouped as "How you behave" says. Keep it short and concrete.
 
 **The core fits almost anyone:** the director, the worker, the report, a project `CLAUDE.md` and the
 harness sheet, plus the onboarding and keeper skills that go with them. Even so, if the user only
@@ -236,20 +252,19 @@ postponing). Say it back in one sentence and ask for their OK. It goes in the ha
 
 ## Step 4: show what you will write, and wait for a yes
 
-Before writing anything, show the user:
+Before writing anything, show the user a summary, for every user, in this order:
 
-- **The list of files**, each with its full path and whether it is new, an addition to an existing
-  file, or an installed copy.
-- **The content**: the full text for short files (`CLAUDE.md` of a small project, a short `/commit`),
-  a faithful summary section by section for long ones (an installed global piece: say whether it is
-  an exact copy or exactly which lines change).
-- **The harness sheet** (`docs/harness.md`), in full: it is short, and it is the record of what you
-  agreed.
-- **What will need their action**: permission prompts for `~/.claude/` and `.claude/` (see step 5),
-  merging settings.
+1. **The decisions that need their answer**, alone and first, so they are not lost in the rest.
+2. **What will be created or changed**, each with one line saying what it is (new, an addition to an
+   existing file, or an installed copy; for a developer, with its path).
+3. **What each file will say**, in two or three lines per file (for an installed global piece: an
+   exact copy, or which parts change).
+4. **What will need their action**: permission prompts for `~/.claude/` and `.claude/` (see step 5),
+   merging settings.
 
-Then ask for an explicit yes. "Looks good", "go ahead" or similar is a yes; silence, a question or
-"maybe" is not. If they want changes, adjust and show the changed parts again.
+Offer the full text of any file and show it when they ask: someone who wants the detail asks for it,
+and nobody has to read whole files to say yes. Then ask for an explicit yes. "Looks good", "go
+ahead" or similar is a yes; silence, a question or "maybe" is not. If they want changes, adjust and show the changed parts again.
 
 ## Step 5: write the chosen pieces
 
@@ -288,7 +303,17 @@ know); language of answers; git and consent rules (or the no-git
 section; when the repository has no remote, the git rules say that agents commit and do not push);
 and, if chosen, the profiles and the progress-doc workflows. Preferences such as a testing
 policy or the cleanup rule are not set here: the user sets them later with `harness-keeper`. One
-line says that the director workflow is available and how to activate it.
+line says that the director workflow is available and how to activate it. If step 2 agreed a way to
+keep the harness out of what is published, it says which folder is published and that `CLAUDE.md`,
+`docs/` and `.claude/` stay out of it (any move this requires is in the step 4 list).
+
+**How results are told to the user.** The project `CLAUDE.md` carries a rule on how results are
+reported to this person, written from what they said in the interview, and it states that it takes
+precedence over the director's fixed delivery format (the director obeys the project's
+`CLAUDE.md`). For someone who does not program: in plain words, what it said before and what it says
+now, where they will see it and what they should check; technical detail (file names, line numbers,
+commit ids) goes in the director's report, not in the message. For a developer: files, lines and
+commits, as in the reference.
 
 **Approvals.** When a rule asks for the user's approval (before a change, a deploy, a deletion),
 write it as addressed to the director: the director gets the approval before launching an agent.
@@ -308,7 +333,8 @@ language. It is the project's record of its own harness: the onboarding reads it
 - Where the reference copy of the repository (`<repo>`) is on this machine, as a full path.
 - What goes wrong for them today with AI, in their own words.
 - The pieces chosen, each with why (the pain it answers).
-- The pieces left out, each with why (git included, if they declined it).
+- The pieces left out: one plain line per group with its reason and the piece names in brackets, so
+  `harness-keeper` can find them (git included, if they declined it).
 - **First task**: the task agreed in step 3, in one or two sentences, and its status (pending).
 
 **Profiles.** One per real area, from the matching example in `project-example/.claude/skills/`,
@@ -361,8 +387,9 @@ subfolders):
 
 End with a short summary in the user's language:
 
-- What was created or changed, with full paths, grouped as project files and `~/.claude/` files.
-- What was deliberately left out, in one line.
+- What was created or changed, each by what it does; for a developer, with full paths, grouped as
+  project files and `~/.claude/` files.
+- What was deliberately left out, as "How you behave" says.
 - **Their helper from now on:** present `harness-keeper` by name. They can call it at any time, in
   any session, in their own words: to ask how something works or how to do something, and to change
   the harness when it does not fit how they work. `/harness-keeper` also works.
