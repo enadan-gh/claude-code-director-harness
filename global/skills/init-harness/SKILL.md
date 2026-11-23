@@ -270,6 +270,7 @@ language. It is the project's record of its own harness: the onboarding reads it
 `harness-keeper` reads it and keeps it up to date. Keep it short, in plain words:
 
 - What the project is, in one line.
+- Where the reference copy of the repository (`<repo>`) is on this machine, as a full path.
 - What goes wrong for them today with AI, in their own words.
 - The pieces chosen, each with why (the pain it answers).
 - The pieces left out, each with why.

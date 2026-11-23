@@ -1,6 +1,7 @@
 # Optional rules catalog
 
-Read by the `init-harness` skill during the interview. Each entry is a **preference**, not a
+Read by the `harness-keeper` skill when the user's story touches an entry or they ask what can be
+tuned. Each entry is a **preference**, not a
 requirement of the director/worker model. Present both sides to the user, with the author's reason
 as one option among others, and apply only what they choose.
 
