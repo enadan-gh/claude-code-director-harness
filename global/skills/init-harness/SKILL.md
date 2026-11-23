@@ -58,7 +58,7 @@ every project; "project" pieces live in the project and are always written new f
 | Director | `global/skills/profile-director/SKILL.md` | The session the user talks to: plans and decides with them, writes briefs, launches helper agents in the background, reviews their work against what really changed, keeps the report | Global |
 | Worker | `global/agents/worker.md` | Helper agent that executes one task from a brief, end to end, and reports back | Global |
 | Onboarding | `global/skills/harness-onboarding/SKILL.md` | In the next session, runs the first task with the director and explains each part the first time it appears | Global |
-| Harness keeper | `global/skills/harness-keeper/` | Later adjustments to the harness: adding or removing pieces, setting preferences; keeps the harness sheet up to date | Global |
+| Harness keeper | `global/skills/harness-keeper/` | The user's help desk: first, answers how the harness works and how to do something with it; then, later adjustments (adding or removing pieces, setting preferences); keeps the harness sheet up to date | Global |
 | Harness sheet | Described in step 5 ("Harness sheet") | `docs/harness.md`: the project's record of its own harness (what goes wrong, pieces chosen and left out and why, the first task). Read by the onboarding and the keeper | Project |
 | Report | Described in the director skill ("The report") and `docs/guide.md` section 2 | One markdown file per stream of work: decisions with the user's reasons, task queue, session log, test script. The director's memory between sessions | Created by the director when a stream starts, in `docs/director-streams/` (or the folder the project's `CLAUDE.md` names), with a name agreed with the user |
 | Project `CLAUDE.md` | `project-example/CLAUDE.md` | The project's rules, read by every session and agent: what the project is, what must never happen, how changes are sized, how to verify, where docs live, git rules | Project |
@@ -297,8 +297,10 @@ placeholder file such as `.gitkeep`.
 ### Global pieces in `~/.claude/`
 
 Check which chosen global pieces are already in `~/.claude/`. For each missing one, offer to install
-it from `<repo>`, with consent. The onboarding and keeper skills are part of the core: they are
-installed together with the director and the worker. Mapping (same subfolders):
+it from `<repo>`, with consent. The onboarding skill is installed together with the director and
+the worker. The keeper skill is installed whenever anything is set up, even when the user chose only
+a `CLAUDE.md`: it is how they later ask how things work or add the director. Mapping (same
+subfolders):
 
 | From `<repo>` | To |
 | --- | --- |
@@ -334,4 +336,6 @@ End with a short summary in the user's language:
   down in the harness sheet, starting with the first task.
 
 If they chose only a `CLAUDE.md`, with no director, skip the onboarding: tell them the rules are
-read by every new session in the project, and that `harness-keeper` can add the director later.
+read by every new session in the project, and that `harness-keeper`, installed as well, answers
+how things work and can add the director later: they say "adjust the harness" or run
+`/harness-keeper`.

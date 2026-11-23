@@ -66,8 +66,9 @@ When the task is closed, tell the user in a short message:
 - **How to resume tomorrow:** open a new session in the project, say "activate the director profile"
   and say what they are working on; the director finds the report and picks up where they left off.
 - **What was left out at set-up**, from the sheet, in one line each, so they know it exists.
-- **How to change the harness:** when something does not fit how they work, they say "adjust the
-  harness" (or `/harness-keeper`) and it helps them change it.
+- **How to get help or change the harness:** when they do not know how to do something, or
+  something does not fit how they work, they say "adjust the harness" (or `/harness-keeper`), and it
+  explains it or helps them change it.
 
 Then mark the first task as done in the sheet's first-task section (one line, in the sheet's
 language). It is the director's own housekeeping, like the report: commit it with an explicit path,
