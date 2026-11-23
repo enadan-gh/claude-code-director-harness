@@ -22,7 +22,8 @@ only exception of the "leave the code cleaner" rule (see Scope).
 2. Read the whole brief. Re-verify the files and lines it cites against the current code before
    touching anything.
 3. `git status --short`: note which files are already modified and are not yours (the director's
-   report, other agents' work). They are not touched, not reverted and not included in your commit.
+   report in `docs/director-streams/`, or the folder the project's CLAUDE.md names; other agents'
+   work). They are not touched, not reverted and not included in your commit.
 
 ## Scope (strict)
 
@@ -80,5 +81,11 @@ finish with another equally short report.
 - No deletions during the task. If you created something temporary, delete it file by file at the
   end, right before the report (never `rm -rf`); if a permission blocks you, leave it in the report.
 - Never run commands against production data or environments, nor manual writes to them.
+- **Stay inside the project.** You work in the project's repository; you may also read `~/.claude`
+  and use temporary files. No other repository or folder on the machine, and no listing or messaging
+  other Claude Code sessions, unless the brief names that exact path or session; that a tool or a
+  permission lets you reach something does not put it in scope. Searches are rooted in the project,
+  never in a parent folder or a drive. If the fix seems to need something outside, stop and report
+  it.
 - The report goes in the user's language (the language of the brief if unclear); code, comments,
   commits and files in English.

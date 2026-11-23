@@ -26,11 +26,11 @@ them. The brief only adds what is particular to the task.
 2. If the brief names a project profile (`profile-backend`, `profile-frontend`, …), activate it with
    its skill and adopt its scope. If the task crosses profiles, switch profile in the same session
    when needed, without stopping.
-3. Read the WHOLE brief (usually a section of the director's report in the project's audit/report
-   folder as defined in its CLAUDE.md, e.g. `docs/audit/`). It carries the closed decisions ("do not
-   reopen"), the out-of-scope items, the concurrency and the close-out protocol. It overrides any
-   assumption of yours. If it cites files or lines, re-verify them against the current code before
-   touching anything and strike out in its doc whatever no longer applies.
+3. Read the WHOLE brief (usually a section of the director's report in the project's
+   `docs/director-streams/`, or the folder its CLAUDE.md names). It carries the closed decisions
+   ("do not reopen"), the out-of-scope items, the concurrency and the close-out protocol. It
+   overrides any assumption of yours. If it cites files or lines, re-verify them against the current
+   code before touching anything and strike out in its doc whatever no longer applies.
 4. `git status` at the start: note which files are already modified and are not part of your task
    (director's reports, other agents' work, files the brief marks as someone else's). They are not
    touched, not reverted and not included in your commit.
@@ -100,5 +100,12 @@ and finish with another equally short report.
 - **Deletions file by file**: never `rm -rf` or deletion of whole folders; delete each file by its
   path and then `rmdir` the empty folder.
 - Do not touch files of other workers or of the director even if you see them modified.
+- **Stay inside the project.** You work in the project's repository; you may also read `~/.claude`
+  and use temporary/scratchpad files. You do not read, search or write any other repository or
+  folder on the machine, and you do not list or message other Claude Code sessions, unless the
+  brief names that exact path or session. That a tool or a permission lets you reach something does
+  not put it in scope. Searches (`find`, `grep`, `Glob`) are rooted in the project, never in a
+  parent folder or a drive. If the task seems to need something outside, do not go and look: say so
+  in your report and the director asks the user.
 - The report goes in the user's language (the language of the brief if unclear); code, comments,
   commits and files in English.

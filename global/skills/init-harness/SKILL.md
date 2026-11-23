@@ -60,7 +60,7 @@ every project; "project" pieces live in the project and are always written new f
 | --- | --- | --- | --- |
 | Director | `global/skills/profile-director/SKILL.md` | The session the user talks to: plans and decides with them, writes briefs, launches helper agents in the background, reviews their work against what really changed, keeps the report | Global |
 | Worker | `global/agents/worker.md` | Helper agent that executes one task from a brief, end to end, and reports back | Global |
-| Report | Described in the director skill ("The report") and `docs/guide.md` section 2 | One markdown file per stream of work: decisions with the user's reasons, task queue, session log, test script. The director's memory between sessions | Created by the director when work starts; the project's `CLAUDE.md` says where |
+| Report | Described in the director skill ("The report") and `docs/guide.md` section 2 | One markdown file per stream of work: decisions with the user's reasons, task queue, session log, test script. The director's memory between sessions | Created by the director when a stream starts, in `docs/director-streams/` (or the folder the project's `CLAUDE.md` names), with a name agreed with the user |
 | Project `CLAUDE.md` | `project-example/CLAUDE.md` | The project's rules, read by every session and agent: what the project is, what must never happen, how changes are sized, how to verify, where docs live, git rules | Project |
 | Quick-fixer | `global/agents/quick-fixer.md` | Cheaper helper agent for small fixes the director already diagnosed and the user approved | Global |
 | Progress-doc workflows | `global/skills/new-feature/` (`SKILL.md`, `skills-index.md`), `global/commands/rework.md`, `global/commands/do-feature.md`, `global/commands/fix-bug.md` | Plan a feature or a rework in a progress doc (`docs/progress/`, `docs/rework/`), run it to the end, diagnose bugs before fixing them | Global |
@@ -83,8 +83,8 @@ like:
 > you only for decisions. When something is decided, it hands the work to **helper agents** that run
 > in the background. When a helper finishes, the director checks what was actually changed, not what
 > the helper says it changed, and tells you. It also keeps a written **report** in your project, so
-> nothing is forgotten between sessions: tomorrow you open a new session, point it at the report and
-> it picks up where you left off. This is one person's way of working; we'll take only what helps you."
+> nothing is forgotten between sessions: tomorrow you open a new session, tell it what you are working
+> on, and it finds that report and picks up where you left off. This is one person's way of working; we'll take only what helps you."
 
 Then say how this will go: a few questions, a proposal, they see every file before anything is
 written, and nothing is written without their yes.
@@ -238,9 +238,11 @@ version the way you would rewrite someone's `CLAUDE.md` in their own style for a
 example of structure. Usually: one line on what the project is; the non-negotiable rules that answer
 their pains ("verify, don't assume" almost always; secrets and env files if they have them); how
 changes are sized and when to plan first; how to verify a change (their real build, lint, typecheck
-and test commands, or, if there are none, what verification means here); where docs and **the
-director's report** live (for example `docs/audit/` or a simpler `docs/` folder: pick one with the
-user, the director needs to know); language of answers; git and consent rules (or the no-git
+and test commands, or, if there are none, what verification means here); where docs live and where
+**the director's reports** live (by default `docs/director-streams/`, one file per stream, named
+with the user when the stream starts; for a user without git or a very simple project a simpler
+folder such as `docs/` is fine: pick it with the user and write it down, the director needs to
+know); language of answers; git and consent rules (or the no-git
 section); and, if chosen, the profiles, the progress-doc workflows, the testing policy and the
 cleanup rule. One line says that the director workflow is available and how to activate it.
 
@@ -302,4 +304,5 @@ End with a short summary in the user's language:
 - Anything they still have to do (set up git, restart the session so new agents and
   skills load).
 - **How to start:** open a session in the project, say "activate the director profile" and then tell
-  it what you want, as you would tell a project manager.
+  it what you want, as you would tell a project manager. For new work it proposes a name for the
+  stream's report; later sessions find that report by what the user says they are working on.
