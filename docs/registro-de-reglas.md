@@ -95,3 +95,35 @@ Cada entrada sigue el mismo formato: **Qué pasó → La regla → Por qué se r
 **La regla.** Los agentes me hacen sus preguntas en el chat, cuando han terminado su trabajo o se han parado ante un bloqueo real, en lugar de usar la herramienta de preguntas con opciones.
 
 **Por qué se resuelve así.** La herramienta bloquea la sesión hasta que contesto, la pregunta llega en mitad del trabajo y, si no estoy delante, ese tiempo de ejecución se pierde. Otros pueden preferir la herramienta; consulta la sección 8 de la [guía](guia.md).
+
+## 2026-11-23 — Solo este proyecto
+
+**Qué pasó.** A una sesión de un proyecto le pedí «revisar los streams» y se puso a listar las demás sesiones de la máquina y a leer informes e historial de git de otros proyectos. No modificó nada.
+
+**La regla.** El director y todos los agentes que lanza trabajan dentro del proyecto: su repositorio, `~/.claude`, el scratchpad y los ficheros temporales de la sesión, y los propios agentes del director. No salen de ahí por iniciativa propia: ni otros repositorios o carpetas de la máquina, ni otras sesiones de Claude Code (listarlas, leer lo que hacen, escribirles). Solo salen cuando yo lo pido y nombro el destino; esa petición ya es la autorización. Que una herramienta, un permiso, un directorio de trabajo adicional o una ruta en un fichero permitan llegar a algo no lo mete en el alcance. «Los directores», «los streams», «los informes» son los de este proyecto, y las búsquedas parten del proyecto, nunca de una carpeta padre o de una unidad. El worker solo sale si el brief nombra esa ruta o sesión exacta; si cree que hace falta algo de fuera, lo dice en su informe.
+
+**Por qué se resuelve así.** El límite viene de mi petición, no de lo que la máquina deja alcanzar: cada uno configura su máquina por sus propias razones, y eso no dice nada sobre qué quiero que se mire. Es un límite, no un control: dentro del proyecto se trabaja como siempre y no se pide nada nuevo.
+
+## 2026-11-23 — Un mensaje por entrega, después de la revisión
+
+**Qué pasó.** No hay un incidente registrado.
+
+**La regla.** Cuando llega una entrega (worker, `quick-fixer` o agente de exploración), el director escribe como mucho una línea («T7 entregada, la reviso») y hace la revisión; me escribe una sola vez, con el resultado ya verificado. Una tarea devuelta a corrección se anuncia en una línea y el mensaje de revisión se escribe cuando se cierra, salvo que la corrección necesite antes una decisión mía. Si una conclusión depende de varios agentes, la síntesis se escribe cuando entrega el último. Las peticiones se retienen mientras un agente en marcha pueda cambiar sus opciones o la recomendación, diciendo en una línea qué se retiene y a quién espera. Una pregunta directa mía se contesta en el momento.
+
+**Por qué se resuelve así.** Lo que reporta un agente no está verificado cuando llega su notificación. Contármelo entonces y otra vez tras comprobarlo me obliga a leer lo mismo dos veces, la primera en su versión menos fiable, y una revisión que corrige el resumen del agente contradice lo que el director ya había dicho.
+
+## 2026-11-23 — Formato de las respuestas
+
+**Qué pasó.** La primera versión de esta regla, escrita ese mismo día, cerraba cada mensaje con un bloque de estado fijo de tres líneas (qué está en marcha, qué viene después, qué está pendiente de mí) dentro de un bloque de código. Al usarlo, las líneas no se ajustaban y obligaban a desplazarse en horizontal, y el bloque se escribía aunque no tuviera nada que decir («Running: nada»). Lo quité ese mismo día.
+
+**La regla.** Una respuesta conversacional no tiene plantilla: contesta a lo preguntado. Dos piezas tienen forma fija, en mi idioma y sin secciones vacías: la revisión de una entrega (tarea, veredicto, commits, hallazgos de la revisión, decisiones propias del worker ratificadas o corregidas, cabos sueltos) y la petición de una decisión o un consentimiento (tarea y contexto, qué necesita de mí, opciones con la recomendada primero, dónde mirar, qué pasa después). El mensaje se cierra de forma conversacional y, cuando hay algo pendiente de mí, termina diciéndolo con palabras normales; una petición aún sin contestar se recuerda al final en una línea que se entiende por sí sola.
+
+**Por qué se resuelve así.** Lo que importa es que al final del mensaje vea qué está pendiente de mí, y decirlo con palabras normales ya lo consigue. El arreglo fue deshacer el cambio, no añadir reglas sobre el fallo.
+
+## 2026-11-23 — Los informes del director, en una carpeta fija y con un nombre acordado
+
+**Qué pasó.** La skill del director solo decía que el informe se creara en la ruta de documentos del proyecto, sin carpeta ni nombre. Un proyecto acabó con un `informe-stream.md` genérico que no decía nada de su trabajo, y solo se encontraba porque el `CLAUDE.md` de ese proyecto lo nombraba.
+
+**La regla.** Los informes del director viven en `docs/director-streams/` del proyecto (o en la carpeta que nombre su `CLAUDE.md`), un fichero por stream, con un nombre corto y descriptivo en kebab-case que yo recuerde (`docs/director-streams/checkout-redesign.md`). El nombre se acuerda al activar el perfil: si mi mensaje dice cuál es el trabajo y coincide con un stream existente, el director lee ese informe entero y lo retoma; si es trabajo nuevo, propone un nombre descriptivo, me lo dice en una línea para que pueda cambiarlo y crea el informe; si solo activo el perfil, me enseña los streams que hay y me pregunta en el chat si retomo uno o abro otro, cuál es el trabajo y cómo llamarlo. Un informe que yo señale en otro sitio se sigue leyendo entero y se usa tal cual.
+
+**Por qué se resuelve así.** Con una carpeta fija el director encuentra los streams por sí mismo al activarse, y un nombre acordado al empezar es uno que recuerdo cuando vuelvo.

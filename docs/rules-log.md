@@ -95,3 +95,35 @@ Each entry follows the same format: **What happened → The rule → Why it is s
 **The rule.** Agents ask me their questions in the chat, once they have finished their work or stopped at a real blocker, instead of using the multiple-choice question tool.
 
 **Why it is solved this way.** The tool blocks the session until I answer, the question arrives in the middle of the work, and if I am away the execution time is lost. Others may prefer the tool; see section 8 of the [guide](guide.md).
+
+## 2026-11-23 — This project only
+
+**What happened.** I asked a session in one project to "review the streams", and it started listing the other sessions on the machine and reading reports and git history from other projects. It modified nothing.
+
+**The rule.** The director and every agent it launches work inside the project: its repository, `~/.claude`, the session's scratchpad and temporary files, and the director's own agents. They do not go outside it on their own initiative: no other repositories or folders on the machine, and no other Claude Code sessions (listing them, reading what they do, messaging them). They go outside only when I ask for it and name the target; that request is the authorization. That a tool, a permission, an additional working directory or a path in a file can reach something does not put it in scope. "The directors", "the streams", "the reports" are this project's, and searches start from the project, never from a parent folder or a drive. A worker goes outside only if its brief names that exact path or session; if it thinks something outside is needed, it says so in its report.
+
+**Why it is solved this way.** The boundary comes from my request, not from what the machine lets the model reach: each person configures their machine for their own reasons, and that says nothing about what I want looked at. It is a boundary, not a checkpoint: inside the project, work goes on as usual and nothing new is asked.
+
+## 2026-11-23 — One message per delivery, after the review
+
+**What happened.** No specific incident is recorded.
+
+**The rule.** When a delivery arrives (worker, `quick-fixer` or exploration agent), the director writes at most one line ("T7 delivered, reviewing it") and does the review; it writes to me once, with the result already verified. A task sent back for correction is announced in one line, and the review message is written when it closes, unless the correction needs a decision from me first. If a conclusion depends on several agents, the synthesis is written when the last one delivers. Requests are held while a running agent can change their options or the recommendation, saying in one line what is held and which agent it waits for. A direct question from me is answered at once.
+
+**Why it is solved this way.** What an agent reports is unverified when its notification arrives. Telling me then and again after checking it makes me read the same thing twice, the first time in its least reliable version, and a review that corrects the agent's summary contradicts what the director had already said.
+
+## 2026-11-23 — Reply format
+
+**What happened.** The first version of this rule, written that same day, closed every message with a fixed three-line block (what is running, what comes next, what is pending from me) inside a code block. In use, the lines did not wrap and forced horizontal scrolling, and the block was written even when it had nothing to say ("Running: nothing"). I removed it the same day.
+
+**The rule.** A conversational reply has no template: it answers what was asked. Two pieces have a fixed shape, in my language and with no empty sections: the delivery review (task, verdict, commits, review findings, the worker's own decisions ratified or corrected, loose ends) and the request for a decision or consent (task and context, what it needs from me, options with the recommended one first, where to look, what happens next). The message closes conversationally and, when something is pending from me, ends by saying so in plain words; a request still unanswered is recalled at the end in one line that stands on its own.
+
+**Why it is solved this way.** What matters is that at the end of the message I see what is pending from me, and saying it in plain words already achieves that. The fix was to undo the change, not to add rules about the failure.
+
+## 2026-11-23 — The director's reports, in a fixed folder and with an agreed name
+
+**What happened.** The director skill only said to create the report in the project's documents path, with no folder or name. One project ended up with a generic `informe-stream.md` that said nothing about its work, and it was only found because that project's `CLAUDE.md` named it.
+
+**The rule.** The director's reports live in the project's `docs/director-streams/` (or the folder its `CLAUDE.md` names), one file per stream, with a short descriptive kebab-case name I will remember (`docs/director-streams/checkout-redesign.md`). The name is agreed on activation: if my message says what the work is and it matches an existing stream, the director reads that report whole and resumes it; if it is new work, it proposes a descriptive name, tells me in one line so I can change it, and creates the report; if I only activate the profile, it shows me the existing streams and asks in the chat whether I resume one or open another, what the work is and what to call it. A report I point to somewhere else is still read whole and used as it is.
+
+**Why it is solved this way.** With a fixed folder the director finds the streams on its own when it activates, and a name agreed at the start is one I remember when I come back.

@@ -8,6 +8,8 @@ This guide explains how the pieces in this repository fit together and why they 
 
 **The director** is the Claude Code session I talk to. I activate it with the `profile-director` skill (`global/skills/profile-director/SKILL.md`). Its contract is simple: I talk and decide; it does everything else through agents. It analyses the code before giving an opinion, presents options with a recommendation and their real cost, writes the briefs, launches the agents, reviews what they deliver and keeps the report. It never implements tasks itself, and it never turns me into a messenger: I am never asked to paste a brief into another window or to bring back an agent's summary.
 
+The director and every agent it launches work inside the project: its repository, `~/.claude`, the session's scratchpad and temporary files. They do not go to another repository, another folder on the machine or another Claude Code session on their own initiative; they go there only when I ask for it and name the target, and that request is the authorization. Reach is not scope: permission rules, additional working directories in the settings or paths that appear in files do not widen the project. Inside it they work as usual; it is a boundary, not one more checkpoint.
+
 **The worker** (`global/agents/worker.md`) executes one task from a brief, end to end, in the background. It reads the project's `CLAUDE.md`, activates the profile the brief names, runs the workflow the brief names (`/new-feature`, `/rework`, `/fix-bug`, then `/do-feature`), verifies, commits and pushes, closes out the documentation and finishes with a report of at most 20 lines. It does not make product decisions and it does not reopen closed ones. If it takes a decision on its own, it records it and reports it, and the director ratifies or corrects it.
 
 **The quick-fixer** (`global/agents/quick-fixer.md`) applies one fix that the director has already diagnosed and I have already approved: a localized bug, a style tweak, a minor configuration change. Strict scope: if the fix turns out bigger than the brief says, needs a migration, crosses backend and frontend or deserves a regression test, it stops without touching anything and reports it. It does not write new tests. It runs on a cheaper model.
@@ -18,7 +20,7 @@ This guide explains how the pieces in this repository fit together and why they 
 
 ## 2. The report
 
-The whole model rests on one living document per work stream: the director's report. The director creates it in the project's audit or documents folder (in my projects, `docs/audit/`) as soon as the work starts producing decisions. Its structure:
+The whole model rests on one living document per work stream: the director's report. The reports live in the project's `docs/director-streams/` (or the folder its `CLAUDE.md` names), one file per stream, with a short descriptive kebab-case name I will remember, such as `docs/director-streams/checkout-redesign.md`. The name is agreed when the director is activated: if my message says what the work is and it matches an existing stream, the director reads that report and picks it up; if it is new work, it proposes a name, tells me in one line so I can change it, and creates the report; if I only activate the profile, it shows me the streams that exist and asks whether to resume one or open a new one. Its structure:
 
 - **Context and diagnosis**: what the stream is about and what the code looked like when it started.
 - **Working model**: how this stream runs (sequential or not, who commits what).
@@ -27,7 +29,7 @@ The whole model rests on one living document per work stream: the director's rep
 - **Session log**: chronological, append-only.
 - **Cumulative test script**: every closed task adds its numbered test cases, with concrete references, so that the final manual test is clicking, not searching.
 
-The report is what survives. Context compactions lose detail and a new chat starts from nothing; the report is on disk and in git. When I open a new session, I point the director at the report and it reads it whole before saying anything.
+The report is what survives. Context compactions lose detail and a new chat starts from nothing; the report is on disk and in git. When I open a new session, I tell the director what I am working on (or point it at a report, wherever it is) and it reads that report whole before saying anything.
 
 Decisions are recorded in the same turn they are taken, and with my reason **in my own words** when I give one. The skill's example is "we don't sell toothpaste". A paraphrase loses the weight of the reason: three weeks later, a summary like "product scope" does not stop anyone from reopening the decision, while my own sentence does. Those decisions travel into the briefs marked as closed, and the agents do not reopen them.
 
@@ -41,18 +43,24 @@ Claude Code keeps the conversation in the prompt cache for a limited time. Accor
 
 Once the cache has expired, any new message in that conversation, even a trivial "give me a summary", sends and processes the whole conversation again. When the conversation was long, that is expensive in tokens.
 
-With the report, I do not need to go back to the old conversation. I open a new session, activate the director, tell it "let's resume this stream" and point it at the report. The only cost is reading the report, not re-sending a conversation that may be very long. So the report is not only what survives compactions and new chats: after a break, it also saves a lot of tokens.
+With the report, I do not need to go back to the old conversation. I open a new session, activate the director and tell it which stream we are resuming; it finds the report in its folder. The only cost is reading the report, not re-sending a conversation that may be very long. So the report is not only what survives compactions and new chats: after a break, it also saves a lot of tokens.
 
 ## 3. A task's life
 
 1. **Brief.** The director writes it and pastes it into the report before launching, so it survives compactions.
 2. **Launch.** The director launches the agent with the `Agent` tool, in the background, with the brief as its prompt. It stays available to me while the agent works.
-3. **Delivery.** When the agent finishes, a notification arrives with its final report. That report is the agent's only channel back, and I do not see it: the director relays it to me and records it.
+3. **Delivery.** When the agent finishes, a notification arrives with its final report. That report is the agent's only channel back, and I do not see it: the director records it and tells me at most one line ("T7 delivered, reviewing it") until the review is done.
 4. **Review on the real diff.** The director reads the full diff of the task's commits, reads the critical files whole, repeats the key checks itself and goes through the agent's "decisions taken alone" one by one. It never approves on the summary.
 5. **Corrections.** If something needs fixing, the director sends the corrections to the same agent with `SendMessage` (it keeps its context); the agent applies them, verifies and commits again, and the director reviews again. A rejected delivery is reverted with a new commit or redone, never by rewriting history.
 6. **Close.** Only after an explicit verdict does the task become closed in the report.
 
 The agent is not asked to wait for approval of its plan or for the review before committing. Git keeps the history and the director reviews afterwards, on the commit. That is what lets the agent run without stopping.
+
+### How the director reports to me
+
+What an agent reports is unverified when it arrives, so the director tells me about a delivery once, after the review: one message with the verified result, never a summary of the agent's report followed by a second message that corrects it. A task sent back for correction gets one line, and the review message comes when the task is closed, unless the correction needs a decision from me first. When a conclusion depends on several agents, it is written once, when the last one has delivered, and a request for a decision is held while a running agent can still change its options. A direct question from me is answered at once, whatever is running.
+
+Ordinary replies have no template: they answer what I asked. Two pieces have a fixed shape: the delivery review (task, verdict, commits, review findings, the agent's own decisions ratified or corrected, loose ends) and the request for a decision or consent (task and context, what it needs from me, options with the recommended one first, where to look, what happens next). The full request is written once; while it stays open, later messages recall it in one line that stands on its own. Each message closes conversationally and, when something is pending from me, ends by saying so in plain words.
 
 ### What a good brief contains
 

@@ -8,6 +8,8 @@ Esta guía explica cómo encajan las piezas de este repositorio y por qué son c
 
 **El director** es la sesión de Claude Code con la que hablo. Lo activo con la skill `profile-director` (`global/skills/profile-director/SKILL.md`). Su contrato es sencillo: yo hablo y decido; él hace todo lo demás a través de agentes. Analiza el código antes de opinar, presenta opciones con una recomendación y su coste real, escribe los briefs, lanza los agentes, revisa lo que entregan y mantiene el informe. Nunca implementa tareas él mismo y nunca me convierte en mensajero: no se me pide pegar un brief en otra ventana ni traerle de vuelta el resumen de un agente.
 
+El director y todos los agentes que lanza trabajan dentro del proyecto: su repositorio, `~/.claude`, el scratchpad y los ficheros temporales de la sesión. No van a otro repositorio, a otra carpeta de la máquina ni a otra sesión de Claude Code por iniciativa propia; solo van cuando yo lo pido y nombro el destino, y esa petición ya es la autorización. Poder llegar no es estar en el alcance: las reglas de permisos, los directorios de trabajo adicionales de la configuración o las rutas que aparecen en los ficheros no amplían el proyecto. Dentro de él se trabaja como siempre; es un límite, no un control más.
+
 **El worker** (`global/agents/worker.md`) ejecuta una tarea a partir de un brief, de principio a fin, en segundo plano. Lee el `CLAUDE.md` del proyecto, activa el perfil que indica el brief, ejecuta el flujo que indica el brief (`/new-feature`, `/rework`, `/fix-bug` y después `/do-feature`), verifica, hace commit y push, cierra la documentación y termina con un informe de 20 líneas como máximo. No toma decisiones de producto ni reabre las que están cerradas. Si decide algo por su cuenta, lo anota y lo reporta, y el director lo ratifica o lo corrige.
 
 **El quick-fixer** (`global/agents/quick-fixer.md`) aplica un único arreglo que el director ya ha diagnosticado y yo ya he aprobado: un bug localizado, un retoque de estilo, un cambio menor de configuración. Alcance estricto: si el arreglo resulta más grande de lo que dice el brief, necesita una migración, cruza backend y frontend o merece un test de regresión, se para sin tocar nada y lo reporta. No escribe tests nuevos. Funciona con un modelo más barato.
@@ -18,7 +20,7 @@ Esta guía explica cómo encajan las piezas de este repositorio y por qué son c
 
 ## 2. El informe
 
-Todo el modelo descansa en un único documento vivo por línea de trabajo: el informe del director. El director lo crea en la carpeta de auditorías o documentos del proyecto (en mis proyectos, `docs/audit/`) en cuanto el trabajo empieza a producir decisiones. Su estructura:
+Todo el modelo descansa en un único documento vivo por línea de trabajo: el informe del director. Los informes viven en `docs/director-streams/` del proyecto (o en la carpeta que nombre su `CLAUDE.md`), un fichero por línea de trabajo, con un nombre corto y descriptivo en kebab-case que yo recuerde, como `docs/director-streams/checkout-redesign.md`. El nombre se acuerda al activar el director: si mi mensaje dice cuál es el trabajo y coincide con una línea existente, el director lee ese informe y la retoma; si es trabajo nuevo, propone un nombre, me lo dice en una línea para que pueda cambiarlo y crea el informe; si solo activo el perfil, me enseña las líneas que hay y me pregunta si retomo una o abro otra. Su estructura:
 
 - **Contexto y diagnóstico**: de qué trata la línea de trabajo y cómo estaba el código al empezar.
 - **Modelo de trabajo**: cómo funciona esta línea (en serie o no, quién hace commit de qué).
@@ -27,7 +29,7 @@ Todo el modelo descansa en un único documento vivo por línea de trabajo: el in
 - **Diario de sesión**: cronológico, solo se añade.
 - **Guion de pruebas acumulado**: cada tarea cerrada añade sus casos numerados, con referencias concretas, para que la prueba manual final sea hacer clic y no buscar.
 
-El informe es lo que sobrevive. Las compactaciones de contexto pierden detalle y un chat nuevo empieza de cero; el informe está en disco y en git. Cuando abro una sesión nueva, le señalo el informe al director y lo lee entero antes de decir nada.
+El informe es lo que sobrevive. Las compactaciones de contexto pierden detalle y un chat nuevo empieza de cero; el informe está en disco y en git. Cuando abro una sesión nueva, le digo al director en qué estoy trabajando (o le señalo un informe, esté donde esté) y lee ese informe entero antes de decir nada.
 
 Las decisiones se anotan en el mismo turno en que se toman, y con mi motivo **en mis propias palabras** cuando lo doy. El ejemplo de la skill es «no vendemos pasta de dientes». Una paráfrasis pierde el peso del motivo: tres semanas después, un resumen como «alcance del producto» no impide que alguien reabra la decisión, y mi frase sí. Esas decisiones viajan a los briefs marcadas como cerradas, y los agentes no las reabren.
 
@@ -41,18 +43,24 @@ Claude Code guarda la conversación en la caché de prompts durante un tiempo li
 
 Una vez caducada la caché, cualquier mensaje nuevo en esa conversación, aunque sea un simple «hazme un resumen», vuelve a enviar y procesar la conversación entera. Si la conversación era larga, eso sale caro en tokens.
 
-Con el informe no necesito volver a la conversación antigua. Abro una sesión nueva, activo el director, le digo «retomemos esta línea de trabajo» y le señalo el informe. El único coste es leer el informe, no volver a enviar una conversación que puede ser muy larga. Así que el informe no solo sobrevive a las compactaciones y a los chats nuevos: después de una pausa, además ahorra muchos tokens.
+Con el informe no necesito volver a la conversación antigua. Abro una sesión nueva, activo el director y le digo qué línea de trabajo retomamos; el informe lo encuentra en su carpeta. El único coste es leer el informe, no volver a enviar una conversación que puede ser muy larga. Así que el informe no solo sobrevive a las compactaciones y a los chats nuevos: después de una pausa, además ahorra muchos tokens.
 
 ## 3. La vida de una tarea
 
 1. **Brief.** Lo escribe el director y lo pega en el informe antes de lanzar, para que sobreviva a las compactaciones.
 2. **Lanzamiento.** El director lanza el agente con la herramienta `Agent`, en segundo plano, con el brief como prompt. Sigue disponible para mí mientras el agente trabaja.
-3. **Entrega.** Cuando el agente termina, llega una notificación con su informe final. Ese informe es el único canal de vuelta del agente y yo no lo veo: el director me lo traslada y lo registra.
+3. **Entrega.** Cuando el agente termina, llega una notificación con su informe final. Ese informe es el único canal de vuelta del agente y yo no lo veo: el director lo registra y, hasta terminar la revisión, me dice como mucho una línea («T7 entregada, la reviso»).
 4. **Revisión sobre el diff real.** El director lee el diff completo de los commits de la tarea, lee enteros los ficheros críticos, repite él mismo las comprobaciones clave y revisa una a una las «decisiones tomadas por su cuenta» del agente. Nunca aprueba sobre el resumen.
 5. **Correcciones.** Si hay que arreglar algo, el director envía las correcciones al mismo agente con `SendMessage` (conserva su contexto); el agente las aplica, verifica y vuelve a hacer commit, y el director revisa de nuevo. Una entrega rechazada se revierte con un commit nuevo o se rehace, nunca reescribiendo la historia.
 6. **Cierre.** Solo tras un veredicto explícito la tarea pasa a cerrada en el informe.
 
 Al agente no se le pide que espere a que se apruebe su plan ni a la revisión antes de hacer commit. Git guarda la historia y el director revisa después, sobre el commit. Eso es lo que permite que el agente trabaje sin pararse.
+
+### Cómo me informa el director
+
+Lo que reporta un agente no está verificado cuando llega, así que el director me cuenta una entrega una sola vez, después de la revisión: un mensaje con el resultado ya verificado, nunca un resumen del informe del agente seguido de un segundo mensaje que lo corrige. Una tarea devuelta a corrección se anuncia en una línea, y el mensaje de revisión llega cuando la tarea se cierra, salvo que la corrección necesite antes una decisión mía. Cuando una conclusión depende de varios agentes, se escribe una vez, cuando ha entregado el último, y una petición de decisión se retiene mientras un agente en marcha todavía pueda cambiar sus opciones. Una pregunta directa mía se contesta en el momento, esté lo que esté en marcha.
+
+Las respuestas normales no tienen plantilla: contestan a lo que he preguntado. Dos piezas tienen forma fija: la revisión de una entrega (tarea, veredicto, commits, hallazgos de la revisión, decisiones propias del agente ratificadas o corregidas, cabos sueltos) y la petición de una decisión o un consentimiento (tarea y contexto, qué necesita de mí, opciones con la recomendada primero, dónde mirar, qué pasa después). La petición completa se escribe una vez; mientras siga abierta, los mensajes siguientes la recuerdan en una línea que se entiende por sí sola. Cada mensaje se cierra de forma conversacional y, cuando hay algo pendiente de mí, termina diciéndolo con palabras normales.
 
 ### Qué lleva un buen brief
 
