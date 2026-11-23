@@ -18,7 +18,7 @@ The model-read files are published from the maintainer's daily copies in `~/.cla
 ## Git
 
 - Work on the `work` branch. **Never commit or push to `main`**; merging into `main` is the maintainer's call. This keeps the convention and means `main` only receives reviewed work.
-- Explicit paths in `git add`; **never `git add -A` or `git add .`**, so nobody else's files (or the private report) get swept in.
+- Explicit paths in `git add`; **never `git add -A` or `git add .`**, so nobody else's files (or the private reports) get swept in.
 - **No `--amend`, `--force` or `--no-verify`**: the history is the review record.
 - One git operation per command: compound commands trigger a permission prompt per subcommand.
 - Commit messages in English.
@@ -35,6 +35,6 @@ The model-read files are published from the maintainer's daily copies in `~/.cla
 - Project-specific details in `project-example/` are always `<placeholders>`, never real values: it is a template each reader fills with their own stack.
 - **Check claims about Claude Code's behaviour** (built-in agents, permissions, settings, cache) against the official documentation before they go into a file. A draft once described an optional agent as overriding a built-in one, and the docs said otherwise.
 
-## The stream report
+## The stream reports
 
-`docs/informe-stream.md` is the maintainer's working report and the director's memory: the director reads it whenever it directs work on this repo. What is forbidden is **publishing** it: it is gitignored, so **never commit it and never un-ignore it**, because it holds local paths and project names. Workers that write published files do not read it, so nothing from it leaks into them; the director passes them what they need in the brief.
+`docs/director-streams/` holds the director's reports, one file per stream: the maintainer's working reports and the director's memory. The director reads the stream's report whenever it directs work on this repo. What is forbidden is **publishing** them: the folder is gitignored, so **never commit it and never un-ignore it**, because the reports hold local paths and project names. Workers that write published files do not read them, so nothing from them leaks into those files; the director passes them what they need in the brief.
