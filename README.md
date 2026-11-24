@@ -2,11 +2,11 @@
 
 [Leer en español](README.es.md)
 
-> **Work in progress.** This repository is still being shaped and tested, so things may change. It does not accept contributions (issues and pull requests are closed), but you are free to copy it and adapt it to your needs; that is the whole idea.
+> **Constantly evolving.** This repository is a starting point that each person adapts to how they work. It does not accept contributions (issues and pull requests are closed), but you are free to copy it and adapt it to your needs; that is the whole idea.
 
 ## Set it up with your AI agent
 
-Open Claude Code in your project and tell it: "Set up the director harness from https://github.com/enadan-gh/claude-code-director-harness in this project." You need Claude Code, because the harness is made of Claude Code skills and agents.
+Open Claude Code in your project and tell it: "Set up the director harness from https://github.com/enadan-gh/claude-code-director-harness in this project." You can also just give it the link in your own words and ask whether it fits you. You need Claude Code, because the harness is made of Claude Code skills and agents.
 
 ### Instructions for the agent
 
@@ -18,7 +18,7 @@ If a user gave you this repository's URL and asked you to set it up in their pro
 4. A skill copied during a session is picked up in that same session: run `/init-harness` now, using the local copy from step 2 as the reference repository (`<repo>`). If `/init-harness` is not available, read the copied `~/.claude/skills/init-harness/SKILL.md` and follow it step by step. Do not ask the user to restart.
 5. Follow that skill's rules: plain language, a few questions at a time in chat, show what you will write before writing it, never overwrite.
 
-This is the same guided route described under "Getting started", driven by your agent.
+This is the same route described in "Guided route" under "Getting started", driven by your agent.
 
 This is how I work with Claude Code. I build real products on my own, with Claude Code inside VS Code, and some friends asked me how I organise it. Instead of explaining it over and over, I put the files I actually use here, cleaned of anything personal and with comments on why each piece exists.
 
@@ -36,9 +36,13 @@ It does not contain language or framework skills, and it is not a package you in
 
 ## Who it is for
 
-People who already use Claude Code on real work and want to see one concrete way of organising it: how to keep a long thread of decisions alive across compactions and new chats, how to delegate tasks to background agents without losing control, and how to keep permission prompts from interrupting you all day.
+You need Claude Code. Beyond that, there are two ways in.
 
-If you are starting with Claude Code, the official documentation is a better first stop. This comes after.
+**If you do not program, or have not worked seriously with AI agents**, the guided route is your way in. You give Claude Code the link in your project. It explains the idea, asks what goes wrong for you today with AI and proposes only what fits. It does the technical part itself, copying and adapting the files, and shows you everything before writing it. It also works on small projects. What it solves is not about size: it is the AI touching what it should not, forgetting what was decided, or saying something is done without checking it.
+
+**If you are technical**, use it to complete your own methodology, or take only some pieces: for example the report, the briefs, or the review against the real diff. The manual route is for that.
+
+Either way, what you get is one concrete way of organising work with Claude Code: how to keep a long thread of decisions alive across compactions and new chats, how to delegate tasks to background agents without losing control, and how to keep permission prompts from interrupting you all day.
 
 ## Adapt, don't copy
 
@@ -70,13 +74,27 @@ Everything lives in one **report**: a markdown file in the project with the cont
 
 ## Getting started
 
+There are two routes. The guided route needs no technical knowledge. The manual route is for technical people who want to choose and adapt the files themselves.
+
+### Guided route (no technical knowledge needed)
+
+Claude Code builds your own version with you and does the technical part itself.
+
+1. **Give it the link.** Open Claude Code in your project and give it the link to this repository. Ask it to set it up, or just ask whether it fits you. The sentence under "Set it up with your AI agent" works too.
+2. **Talk about what goes wrong.** It explains the idea and asks you a few questions, including what goes wrong for you today with AI. That is what decides whether it helps you. It proposes only the pieces that fit your project.
+3. **Check before it writes.** It copies and adapts the files itself. It shows you what it will write before writing it, and it does not overwrite your files. Claude Code asks your permission when it copies into `~/.claude`; that is expected.
+4. **Do a first small task together.** It agrees a small first task with you. Then open a new session in the project and say "start the onboarding" (`/harness-onboarding`). It does that task with you, the way every task will be done, and explains each part the first time it appears.
+5. **Adjust it later.** To ask how something works, add or remove pieces or change a preference, say "adjust the harness" (`/harness-keeper`).
+
+If you prefer to start it by hand: clone or download this repository, copy `global/skills/init-harness/` to `~/.claude/skills/`, open Claude Code in your project and run `/init-harness`. It will ask where you put the copy of this repository.
+
+### Manual route (for technical people)
+
 1. **Read before copying.** Go through `global/skills/profile-director/SKILL.md` and `global/agents/worker.md` first; they hold the whole model.
 2. **Copy and adapt the global part.** Copy the contents of `global/` into `~/.claude/`. Replace the fake entries in `skills/new-feature/skills-index.md` with your own skills.
 3. **Prepare a project.** Copy `project-example/CLAUDE.md` and `project-example/.claude/` into your project and replace the placeholders. Create the project's `/commit` and `/update-docs` from `global/templates/`. Keep only the profiles that make sense for your stack.
 4. **Open a session in the project** and activate the director: "activate the director profile" (or "director mode").
 5. **Tell it what you want**, as you would tell a project manager. It will read the code, ask you what it needs to decide, and start launching agents.
-
-**Guided route.** Instead of copying by hand, you can let Claude Code build your own version with you: clone or download this repository, copy `global/skills/init-harness/` to `~/.claude/skills/`, open Claude Code in your project and run `/init-harness`. It explains the model, asks a few questions, proposes only the pieces that fit your project and shows you what it will write before writing it (it will ask where you cloned this repository). It also agrees with you a small first task. Then open a new session in the project and say "start the onboarding" (`/harness-onboarding`): it does that first task with you, the way every task will be done, explaining each part the first time it appears. Later, to ask how something works, add or remove pieces or change a preference, say "adjust the harness" (`/harness-keeper`).
 
 ## Further reading
 
