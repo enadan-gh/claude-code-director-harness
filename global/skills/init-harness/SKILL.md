@@ -27,6 +27,8 @@ problems, and to build with them the smallest setup that solves those problems, 
   someone who works with them. For the pieces left out: to someone who does not program, one sentence
   for the whole group and its reason ("I am leaving out the pieces meant for larger programming
   projects"), not a list of commands; to a developer, the list with a reason for each.
+- **One name per piece.** Introduce each piece with its description the first time, then always
+  call it by the same name for the rest of the conversation; never use one name for two pieces.
 - **Be patient.** A few questions at a time (two or three), in normal chat. **Never use the
   multiple-choice question tool** in this skill: ask in the chat and let them answer in their own
   words.
@@ -63,14 +65,14 @@ every project; "project" pieces live in the project and are always written new f
 
 | Piece | Reference file(s) | What it does | Kind |
 | --- | --- | --- | --- |
-| Director | `global/skills/profile-director/SKILL.md` | The session the user talks to: plans and decides with them, writes briefs, launches helper agents in the background, reviews their work against what really changed, keeps the report | Global |
-| Worker | `global/agents/worker.md` | Helper agent that executes one task from a brief, end to end, and reports back | Global |
+| Director | `global/skills/profile-director/SKILL.md` | The session the user talks to: decides with them, hands out the work (writes briefs, launches workers in the background) and reviews what really changed; keeps the report | Global |
+| Worker | `global/agents/worker.md` | The agent that carries out each task from the director's brief, end to end, and reports back | Global |
 | Onboarding | `global/skills/harness-onboarding/SKILL.md` | In the next session, runs the first task with the director and explains each part the first time it appears | Global |
-| Harness keeper | `global/skills/harness-keeper/` | The user's help desk: first, answers how the harness works and how to do something with it; then, later adjustments (adding or removing pieces, setting preferences); keeps the harness sheet up to date | Global |
+| Harness keeper | `global/skills/harness-keeper/` | Where the user asks how the harness works and asks to change it: first, answers how the harness works and how to do something with it; then, later adjustments (adding or removing pieces, setting preferences); keeps the harness sheet up to date | Global |
 | Harness sheet | Described in step 5 ("Harness sheet") | `docs/harness.md`: the project's record of its own harness (what goes wrong, pieces chosen and left out and why, the first task). Read by the onboarding and the keeper | Project |
 | Report | Described in the director skill ("The report") and `docs/guide.md` section 2 | One markdown file per stream of work: decisions with the user's reasons, task queue, session log, test script. The director's memory between sessions | Created by the director when a stream starts, in `docs/director-streams/` (or the folder the project's `CLAUDE.md` names), with a name agreed with the user |
 | Project `CLAUDE.md` | `project-example/CLAUDE.md` | The project's rules, read by every session and agent: what the project is, what must never happen, how changes are sized, how to verify, where docs live, git rules | Project |
-| Quick-fixer | `global/agents/quick-fixer.md` | Helper agent for small fixes the director already diagnosed and the user approved; a bounded fix does not need the most capable model | Global |
+| Quick-fixer | `global/agents/quick-fixer.md` | The agent that applies one small fix the director already diagnosed and the user approved; a bounded fix does not need the most capable model | Global |
 | Progress-doc workflows | `global/skills/new-feature/` (`SKILL.md`, `skills-index.md`), `global/commands/rework.md`, `global/commands/do-feature.md`, `global/commands/fix-bug.md` | Plan a feature or a rework in a progress doc (`docs/progress/`, `docs/rework/`), run it to the end, diagnose bugs before fixing them | Global |
 | `/commit` | `global/templates/commit.md` | Commit only the current task's files and push | Project, adapted from the template |
 | `/update-docs` | `global/templates/update-docs.md` | Close a task: check the code, update the docs, delete the progress doc | Project, adapted from the template |
@@ -225,7 +227,7 @@ apply.
 Present a proposal: what you recommend, **why** (linked to their pains and their project), what each
 piece costs, and what you recommend **leaving out and why**, each piece named by what it does and
 the left-out ones grouped as "How you behave" says. Keep it short and concrete. When you present the
-helper agents, say once that the models set for the background agents are a recommendation, not a
+background agents, say once that the models set for the background agents are a recommendation, not a
 requirement: they can change them to fit their needs (later, with the harness keeper), and you can
 explain the options if they ask. When they ask, look the current models up in the official
 documentation rather than answering from memory.
@@ -403,7 +405,7 @@ End with a short summary in the user's language:
 - What was created or changed, each by what it does; for a developer, with full paths, grouped as
   project files and `~/.claude/` files.
 - What was deliberately left out, as "How you behave" says.
-- **Their helper from now on:** present `harness-keeper` by name. They can call it at any time, in
+- **Where to ask from now on:** present `harness-keeper` by name. They can call it at any time, in
   any session, in their own words: to ask how something works or how to do something, and to change
   the harness when it does not fit how they work. `/harness-keeper` also works. One more line,
   asking for no decision: when they want, it can also help them find skills for the technologies of

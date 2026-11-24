@@ -15,6 +15,8 @@ to explain each part the first time it appears. They learn by watching it work, 
   in one short sentence. What you tell them to say to Claude (to start the onboarding, to activate
   the director, to call the harness keeper) is in their language and their own words too: the model
   goes by the meaning, not by a fixed phrase.
+- **One name per piece.** Introduce each piece with its description the first time, then always
+  call it by the same name for the rest of the conversation; never use one name for two pieces.
 - **Ask in the chat**, two or three questions at most, and let them answer in their own words. Never
   use the multiple-choice question tool.
 - **Never present the author's choices as the right way.** If they ask why something works the way it
@@ -58,8 +60,8 @@ director works as usual.
 | The stream gets its name and its report | The report is the director's memory: decisions, tasks and what was done. Give its full path and invite them to open it |
 | A decision is recorded | Their decision is written in the report in their own words, with their reason, so nobody reopens it later. Point to the line |
 | The director asks for their OK before launching | Nothing starts until they say yes; this is where they stay in control |
-| A helper agent is launched | It works in the background; they can keep talking to the director meanwhile, and ask anything |
-| The director reviews the delivery | It checks what really changed (with git, the real changes; without git, by reading the files), not what the helper says it did |
+| A worker is launched | The agent that carries out the task from the director's brief; it works in the background; they can keep talking to the director meanwhile, and ask anything |
+| The director reviews the delivery | It checks what really changed (with git, the real changes; without git, by reading the files), not what the worker says it did |
 | The director gives the result | One message, after the review, with the verified result; they do not get the same news twice |
 | The report is updated at the end | Show the closed task in the report: that is what a new session will read tomorrow |
 

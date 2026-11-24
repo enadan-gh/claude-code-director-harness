@@ -175,3 +175,11 @@ Each entry follows the same format: **What happened → The rule → Why it is s
 **The rule.** A recommendation, never imposed: activate the director with the most capable model available, with high reasoning effort, choosing it with `/model` before activating the profile. Model names appear only as an example at the time of writing, in the guides.
 
 **Why it is solved this way.** The director understands the problem, decides with the user, writes the briefs and reviews against the real diff; a mistake there spreads through every worker. The workers receive the reasoning already done in the brief, so a less capable model holds up there. A skill's `model` field lasts only for the turn that invokes it, so the choice is made in the session.
+
+## 2026-11-24 — One name per piece, from what it does
+
+**What happened.** In a test of the guided route with a non-technical persona, the session used the same word, "helper", for the worker and for the harness keeper, and then invented a new word for the keeper to tell them apart. The guided-route skills used "helper" or "help desk" for several pieces.
+
+**The rule.** Each piece has a fixed description of what it does, and "helper" is not used for any of them: the director is the session the user talks to, which decides with them, hands out the work and reviews what really changed; the worker is the agent that carries out each task from the director's brief; the quick-fixer is the agent that applies one small fix already diagnosed and approved; the harness keeper is where the user asks how the harness works and asks to change it. `init-harness`, `harness-onboarding` and `harness-keeper` carry one line: introduce each piece with its description the first time, then always call it by the same name; never use one name for two pieces. The names in the user's language are chosen by the model from those descriptions, with no fixed translations.
+
+**Why it is solved this way.** One name per piece, taken from what it does, so the user is never unsure which piece is meant. A generic word fits several pieces, and once two pieces share it the model starts inventing names.

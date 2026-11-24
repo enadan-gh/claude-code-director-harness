@@ -1,6 +1,6 @@
 ---
 name: harness-keeper
-description: The user's help desk for their director harness and the way they adapt it to how they work. Answers how the harness works or how to do something with it, from the user's own installed files, and changes it when something does not fit (a rule, a preference, adding or removing a piece), showing every change before writing it and keeping the harness sheet (docs/harness.md) true. Use when the user runs /harness-keeper, says "adjust the harness", "change how the director works", or asks how the harness works, what a piece is for, or how to do something with it ("how do I resume tomorrow?", "how do I tell it to stop touching X?"), or asks for skills for the technologies of their project.
+description: Where the user asks how their director harness works and asks to change it to fit how they work. Answers how the harness works or how to do something with it, from the user's own installed files, and changes it when something does not fit (a rule, a preference, adding or removing a piece), showing every change before writing it and keeping the harness sheet (docs/harness.md) true. Use when the user runs /harness-keeper, says "adjust the harness", "change how the director works", or asks how the harness works, what a piece is for, or how to do something with it ("how do I resume tomorrow?", "how do I tell it to stop touching X?"), or asks for skills for the technologies of their project.
 ---
 
 # Harness keeper
@@ -16,6 +16,8 @@ many requests end with an answer and nothing changed.
   in one short sentence. What you tell them to say to Claude (to start the onboarding, to activate
   the director, to call the harness keeper) is in their language and their own words too: the model
   goes by the meaning, not by a fixed phrase.
+- **One name per piece.** Introduce each piece with its description the first time, then always
+  call it by the same name for the rest of the conversation; never use one name for two pieces.
 - **Ask in the chat**, two or three questions at most, and let them answer in their own words. Never
   use the multiple-choice question tool.
 - **Never present the author's choices as the right way.** A preference is one option with its

@@ -175,3 +175,11 @@ Cada entrada sigue el mismo formato: **Qué pasó → La regla → Por qué se r
 **La regla.** Una recomendación, nunca impuesta: activar el director con el modelo más capaz disponible, con un esfuerzo de razonamiento alto, eligiéndolo con `/model` antes de activar el perfil. Los nombres de modelos solo aparecen como ejemplo en el momento de escribir, en las guías.
 
 **Por qué se resuelve así.** El director entiende el problema, decide con el usuario, escribe los briefs y revisa sobre el diff real; un error ahí se propaga a todos los workers. Los workers reciben en el brief el razonamiento ya hecho, así que ahí un modelo menos capaz aguanta bien. El campo `model` de una skill solo dura el turno que la invoca, así que la elección se hace en la sesión.
+
+## 2026-11-24 — Un nombre por pieza, sacado de lo que hace
+
+**Qué pasó.** En una prueba de la ruta guiada con un perfil no técnico, la sesión usó la misma palabra, «ayudante», para el worker y para el harness keeper, y luego se inventó otra palabra para el keeper para distinguirlos. Las skills de la ruta guiada usaban «helper» o «help desk» para varias piezas.
+
+**La regla.** Cada pieza tiene una descripción fija de lo que hace, y «ayudante» no se usa para ninguna: el director es la sesión con la que habla el usuario, que decide con él, reparte el trabajo y revisa lo que de verdad cambió; el worker es el agente que ejecuta cada tarea a partir del brief del director; el quick-fixer es el agente que aplica un arreglo pequeño ya diagnosticado y aprobado; el harness keeper es donde el usuario pregunta cómo funciona el harness y pide cambiarlo. `init-harness`, `harness-onboarding` y `harness-keeper` llevan una línea: presentar cada pieza con su descripción la primera vez y después llamarla siempre por el mismo nombre; nunca usar un nombre para dos piezas. Los nombres en el idioma del usuario los elige el modelo a partir de esas descripciones, sin traducciones fijas.
+
+**Por qué se resuelve así.** Un nombre por pieza, sacado de lo que hace, para que el usuario nunca dude de qué pieza se habla. Una palabra genérica encaja con varias piezas, y en cuanto dos piezas la comparten el modelo empieza a inventarse nombres.
