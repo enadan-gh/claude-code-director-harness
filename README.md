@@ -26,6 +26,8 @@ This is how I work with Claude Code. I build real products on my own, with Claud
 
 A commented example of a way of working: one Claude Code session acts as a **director** that talks with me, decides with me and hands the work to **agents running in the background**, then reviews what they deliver. In one line: it is like talking to a project manager who has handed the work to their team.
 
+It is not an agent or a complete harness. Claude Code is the harness: the loop, the tools, the permissions. This is a layer of method on top of it: who decides, who executes, how the work is reviewed and where the thread is kept. The ideas could be adapted to other tools such as Codex, but the files are written for Claude Code and have only been tested there.
+
 The repository contains the files that make that possible: a skill for the director, two agent definitions (`worker` and `quick-fixer`), the workflow commands the agents follow, templates for per-project commands, and a full example of what a project repository carries (its `CLAUDE.md`, work profiles, a project hook and a deploy command).
 
 It does not contain language or framework skills, and it is not a package you install.

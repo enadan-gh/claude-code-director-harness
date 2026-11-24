@@ -26,6 +26,8 @@ Así es como trabajo con Claude Code. Desarrollo productos reales yo solo, con C
 
 Un ejemplo comentado de una forma de trabajar: una sesión de Claude Code hace de **director**, que habla conmigo, decide conmigo y reparte el trabajo entre **agentes que se ejecutan en segundo plano**, y luego revisa lo que entregan. En una línea: es como hablar con un jefe de proyecto que ha repartido el trabajo entre su equipo.
 
+No es un agente ni un harness completo. El harness es Claude Code: el bucle, las herramientas, los permisos. Esto es una capa de método por encima: quién decide, quién ejecuta, cómo se revisa el trabajo y dónde se guarda el hilo. Las ideas se podrían adaptar a otras herramientas como Codex, pero los ficheros están escritos para Claude Code y solo se han probado ahí.
+
 El repositorio contiene los ficheros que lo hacen posible: una skill para el director, dos definiciones de agente (`worker` y `quick-fixer`), los comandos de flujo de trabajo que siguen los agentes, plantillas para comandos de cada proyecto y un ejemplo completo de lo que lleva el repositorio de un proyecto (su `CLAUDE.md`, perfiles de trabajo, un hook propio y un comando de despliegue).
 
 No contiene skills de lenguajes ni de frameworks, y no es un paquete que se instale.
