@@ -235,7 +235,7 @@ Minimums:
 
 ## Director's quick fixes
 
-Quick fixes are applied by the `quick-fixer` agent (a cheaper model, see quick-fixer.md), not by
+Quick fixes are applied by the `quick-fixer` agent (a model chosen for bounded fixes, see quick-fixer.md), not by
 the director (bounded scope, and without cluttering the director's context). Flow: director's
 diagnosis → explicit approval by the user → short brief → `quick-fixer` in the background → review
 of the diff → recording.

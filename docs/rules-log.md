@@ -68,9 +68,9 @@ Each entry follows the same format: **What happened → The rule → Why it is s
 
 **What happened.** No incident as such. When the director applied quick fixes itself, every fix dirtied its context and made it bigger for no reason. I moved quick fixes to a separate agent to keep the director's context as clean as possible.
 
-**The rule.** The director does not apply quick fixes itself. It diagnoses, I approve, and a dedicated `quick-fixer` agent, on a cheaper model, applies the fix from a short brief, verifies it and commits it. The director reviews the diff afterwards, as with any worker.
+**The rule.** The director does not apply quick fixes itself. It diagnoses, I approve, and a dedicated `quick-fixer` agent, on a model chosen for bounded fixes, applies the fix from a short brief, verifies it and commits it. The director reviews the diff afterwards, as with any worker.
 
-**Why it is solved this way.** The director's context is what holds the thread of the whole stream; filling it with the details of each small fix makes it worse at its real job. The cheaper model comes second, and it is an optimization, not the reason: a quick fix has a bounded scope, so a cheaper model is enough.
+**Why it is solved this way.** The director's context is what holds the thread of the whole stream; filling it with the details of each small fix makes it worse at its real job. The model comes second, and it is not the reason: a quick fix has a bounded scope, so it does not need the most capable model to be done well.
 
 ## 2026-11-18 — Boy Scout only inside the worker's own files; none for the quick-fixer
 
@@ -127,3 +127,51 @@ Each entry follows the same format: **What happened → The rule → Why it is s
 **The rule.** The director's reports live in the project's `docs/director-streams/` (or the folder its `CLAUDE.md` names), one file per stream, with a short descriptive kebab-case name I will remember (`docs/director-streams/checkout-redesign.md`). The name is agreed on activation: if my message says what the work is and it matches an existing stream, the director reads that report whole and resumes it; if it is new work, it proposes a descriptive name, tells me in one line so I can change it, and creates the report; if I only activate the profile, it shows me the existing streams and asks in the chat whether I resume one or open another, what the work is and what to call it. A report I point to somewhere else is still read whole and used as it is.
 
 **Why it is solved this way.** With a fixed folder the director finds the streams on its own when it activates, and a name agreed at the start is one I remember when I come back.
+
+## 2026-11-24 — The first explanation is checked, not assumed
+
+**What happened.** In a test of the guided route with a non-technical persona, the session that read the README wrote "I'll explain what it does" and went straight to asking where to put the copy, without giving the explanation. Then `init-harness` skipped it, because its first step said to skip it when it had already been given in the session: that was assumed, not checked. What follows it (that this is one person's way of working, the guided first task, how the set-up will go) was never said either.
+
+**The rule.** In the README's agent instructions, the project-manager explanation is the first message to the user, a message of its own, sent before any question or action that needs them. In `init-harness`, the explanation is skipped only when it actually appears in one of the session's own earlier messages; otherwise it is given then. What follows it is always said.
+
+**Why it is solved this way.** The explanation is what lets a non-technical user follow everything else. Giving it in its own message makes it hard to fold into a question, and checking one's own messages instead of trusting what the instructions say should have happened closes the gap between the two steps.
+
+## 2026-11-24 — The README entry asks in the chat and installs what was asked
+
+**What happened.** In the same test, the README entry asked the user with the multiple-choice question tool, because the "ask in the chat" rule lived only inside `init-harness`, which had not been loaded yet. It also turned the warning about the permission prompt into an extra question asking consent to copy the skill into `~/.claude`.
+
+**The rule.** The README's agent instructions say to ask the user in the chat, in plain words, letting them answer in their own words. When copying the skill, the agent tells the user that a permission prompt will appear and goes ahead: installing it is what they asked for, and the permission prompt is where they accept or decline.
+
+**Why it is solved this way.** The README runs before any skill, so its rules have to be in the README itself. A second consent on top of the permission prompt asks the same thing twice.
+
+## 2026-11-24 — Changes to how the harness works go through the harness keeper
+
+**What happened.** In the same test, with the director active, the user said "don't put file names or technical words in your messages". The director turned it into a rule, edited the project's `CLAUDE.md` and committed it without showing the change first, without waiting for a yes and without updating the harness sheet, and wrote a date and who asked for it into the rule. When the user named the harness keeper, everything went right.
+
+**The rule.** The project `CLAUDE.md` that `init-harness` writes carries one line: changes to how the harness works (the project's rules, its pieces, the user's preferences) go through `harness-keeper`, which shows each change before writing it and keeps `docs/harness.md` true. The director skill is not changed for this.
+
+**Why it is solved this way.** The keeper already does this right; what was missing was the project telling every session that this kind of change is the keeper's job. One line in the file every session reads does that without adding rules to the director.
+
+## 2026-11-24 — Agents and models are described by whether the work gets done well
+
+**What happened.** The `init-harness` catalogue described the quick-fixer as a "cheaper helper agent", and in the same test the session told the user it was leaving out "the cheap agent". Several files described agents and model choices by cost or as "lightweight".
+
+**The rule.** Agents and models are never described by cost, nor as "lightweight". There are more capable and less capable models; each choice is described by what the work needs and whether it gets done well ("a bounded, already diagnosed fix does not need the most capable model").
+
+**Why it is solved this way.** Describe by whether the work gets done well, not by cost. Calling an agent cheap tells the user nothing about what it is for, and makes a choice of fit sound like a choice of lower quality.
+
+## 2026-11-24 — Skills for the project's stack, when the user asks
+
+**What happened.** There was no incident. The repository says each reader brings their own language and framework skills, but never said where to get them.
+
+**The rule.** At the close of `init-harness`, one informative line, asking for no decision: the harness keeper can help find skills for the project's technologies, when the user asks. When asked, the keeper looks at the stack, searches (skills.sh is one possible source), proposes a few with one line each, reads each skill before installing it (third-party instructions the model will obey, possibly with scripts), prefers known publishers, installs only the specific skill and never a whole repository, lets the user choose between a global and a project install, and installs nothing without a yes.
+
+**Why it is solved this way.** It fills the gap without adding steps or questions to the set-up. Few good skills beat many overlapping ones, because every installed skill's description loads into the context, and a skill is instructions the model obeys, so it is read before it is installed.
+
+## 2026-11-24 — The most capable model for the director
+
+**What happened.** There was no incident. The test ran the director on a mid-range model and it held up on small tasks. This follows from the way of working.
+
+**The rule.** A recommendation, never imposed: activate the director with the most capable model available, with high reasoning effort, choosing it with `/model` before activating the profile. Model names appear only as an example at the time of writing, in the guides.
+
+**Why it is solved this way.** The director understands the problem, decides with the user, writes the briefs and reviews against the real diff; a mistake there spreads through every worker. The workers receive the reasoning already done in the brief, so a less capable model holds up there. A skill's `model` field lasts only for the turn that invokes it, so the choice is made in the session.

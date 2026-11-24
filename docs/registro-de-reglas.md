@@ -68,9 +68,9 @@ Cada entrada sigue el mismo formato: **Qué pasó → La regla → Por qué se r
 
 **Qué pasó.** No hubo un incidente como tal. Cuando el director aplicaba él mismo los arreglos rápidos, cada arreglo ensuciaba su contexto y lo hacía más grande sin necesidad. Pasé los arreglos rápidos a un agente aparte para mantener el contexto del director lo más limpio posible.
 
-**La regla.** El director no aplica arreglos rápidos él mismo. Diagnostica, yo apruebo, y un agente `quick-fixer` dedicado, con un modelo más barato, aplica el arreglo a partir de un brief corto, lo verifica y hace commit. El director revisa el diff después, como con cualquier worker.
+**La regla.** El director no aplica arreglos rápidos él mismo. Diagnostica, yo apruebo, y un agente `quick-fixer` dedicado, con un modelo elegido para arreglos acotados, aplica el arreglo a partir de un brief corto, lo verifica y hace commit. El director revisa el diff después, como con cualquier worker.
 
-**Por qué se resuelve así.** El contexto del director es lo que sostiene el hilo de toda la línea de trabajo; llenarlo con los detalles de cada arreglo pequeño lo hace peor en su verdadero trabajo. El modelo más barato va en segundo lugar y es una optimización, no el motivo: un arreglo rápido tiene un alcance acotado, así que basta un modelo más barato.
+**Por qué se resuelve así.** El contexto del director es lo que sostiene el hilo de toda la línea de trabajo; llenarlo con los detalles de cada arreglo pequeño lo hace peor en su verdadero trabajo. El modelo va en segundo lugar y no es el motivo: un arreglo rápido tiene un alcance acotado, así que no necesita el modelo más capaz para salir bien.
 
 ## 2026-11-18 — Boy Scout solo dentro de los ficheros del worker; ninguno para el quick-fixer
 
@@ -127,3 +127,51 @@ Cada entrada sigue el mismo formato: **Qué pasó → La regla → Por qué se r
 **La regla.** Los informes del director viven en `docs/director-streams/` del proyecto (o en la carpeta que nombre su `CLAUDE.md`), un fichero por stream, con un nombre corto y descriptivo en kebab-case que yo recuerde (`docs/director-streams/checkout-redesign.md`). El nombre se acuerda al activar el perfil: si mi mensaje dice cuál es el trabajo y coincide con un stream existente, el director lee ese informe entero y lo retoma; si es trabajo nuevo, propone un nombre descriptivo, me lo dice en una línea para que pueda cambiarlo y crea el informe; si solo activo el perfil, me enseña los streams que hay y me pregunta en el chat si retomo uno o abro otro, cuál es el trabajo y cómo llamarlo. Un informe que yo señale en otro sitio se sigue leyendo entero y se usa tal cual.
 
 **Por qué se resuelve así.** Con una carpeta fija el director encuentra los streams por sí mismo al activarse, y un nombre acordado al empezar es uno que recuerdo cuando vuelvo.
+
+## 2026-11-24 — La primera explicación se comprueba, no se supone
+
+**Qué pasó.** En una prueba de la ruta guiada con una persona no técnica, la sesión que leyó el README escribió «te explico lo que hace» y pasó directamente a preguntar dónde poner la copia, sin dar la explicación. Después `init-harness` se la saltó, porque su primer paso decía que se saltara si ya se había dado en la sesión: se supuso, no se comprobó. Lo que va detrás (que es la forma de trabajar de una persona, la primera tarea guiada, cómo va a ir la instalación) tampoco se dijo.
+
+**La regla.** En las instrucciones para el agente del README, la explicación del jefe de proyecto es el primer mensaje al usuario, un mensaje propio, enviado antes de cualquier pregunta o acción que le necesite. En `init-harness`, la explicación solo se salta cuando aparece de verdad en uno de los mensajes anteriores de la propia sesión; si no, se da en ese momento. Lo que va detrás se dice siempre.
+
+**Por qué se resuelve así.** La explicación es lo que permite a un usuario no técnico seguir todo lo demás. Darla en un mensaje propio hace difícil meterla dentro de una pregunta, y comprobar los propios mensajes en lugar de fiarse de lo que las instrucciones dicen que debería haber pasado cierra el hueco entre los dos pasos.
+
+## 2026-11-24 — La entrada del README pregunta en el chat e instala lo que se ha pedido
+
+**Qué pasó.** En la misma prueba, la entrada del README preguntó al usuario con la herramienta de preguntas con opciones, porque la regla de «preguntar en el chat» solo estaba dentro de `init-harness`, que aún no se había cargado. Además convirtió el aviso de la petición de permiso en una pregunta más, pidiendo consentimiento para copiar la skill en `~/.claude`.
+
+**La regla.** Las instrucciones para el agente del README dicen que se pregunte al usuario en el chat, con palabras sencillas, dejando que conteste con sus propias palabras. Al copiar la skill, el agente avisa al usuario de que aparecerá una petición de permiso y sigue adelante: instalarla es lo que ha pedido, y la petición de permiso es donde acepta o rechaza.
+
+**Por qué se resuelve así.** El README se ejecuta antes que cualquier skill, así que sus reglas tienen que estar en el propio README. Un segundo consentimiento encima de la petición de permiso pregunta lo mismo dos veces.
+
+## 2026-11-24 — Los cambios en cómo funciona el harness pasan por el harness keeper
+
+**Qué pasó.** En la misma prueba, con el director activo, el usuario dijo «no pongas nombres de ficheros ni palabras técnicas en tus mensajes». El director lo convirtió en una regla, editó el `CLAUDE.md` del proyecto e hizo commit sin enseñar antes el cambio, sin esperar un sí y sin actualizar la hoja del harness, y escribió en la regla una fecha y quién la había pedido. Cuando el usuario nombró al harness keeper, todo fue bien.
+
+**La regla.** El `CLAUDE.md` del proyecto que escribe `init-harness` lleva una línea: los cambios en cómo funciona el harness (las reglas del proyecto, sus piezas, las preferencias del usuario) pasan por `harness-keeper`, que enseña cada cambio antes de escribirlo y mantiene fiel `docs/harness.md`. La skill del director no se cambia por esto.
+
+**Por qué se resuelve así.** El keeper ya lo hace bien; lo que faltaba era que el proyecto le dijera a cada sesión que este tipo de cambio es trabajo del keeper. Una línea en el fichero que leen todas las sesiones lo consigue sin añadir reglas al director.
+
+## 2026-11-24 — Los agentes y los modelos se describen por si el trabajo sale bien
+
+**Qué pasó.** El catálogo de `init-harness` describía al quick-fixer como un «agente ayudante más barato», y en la misma prueba la sesión le dijo al usuario que dejaba fuera «el agente barato». Varios ficheros describían agentes y elecciones de modelo por su coste o como «ligeros».
+
+**La regla.** Los agentes y los modelos nunca se describen por su coste ni como «ligeros». Hay modelos más capaces y menos capaces; cada elección se describe por lo que necesita el trabajo y por si sale bien («un arreglo acotado y ya diagnosticado no necesita el modelo más capaz»).
+
+**Por qué se resuelve así.** Se describe por si el trabajo sale bien, no por lo que cuesta. Llamar barato a un agente no le dice al usuario para qué sirve, y hace que una elección por encaje suene a una elección de menos calidad.
+
+## 2026-11-24 — Skills para el stack del proyecto, cuando el usuario las pide
+
+**Qué pasó.** No hubo incidente. El repositorio dice que cada lector trae sus propias skills de lenguajes y frameworks, pero nunca decía dónde conseguirlas.
+
+**La regla.** Al cerrar `init-harness`, una línea informativa que no pide ninguna decisión: el harness keeper puede ayudar a encontrar skills para las tecnologías del proyecto, cuando el usuario lo pida. Cuando se lo piden, el keeper mira el stack, busca (skills.sh es una fuente posible), propone unas pocas con una línea cada una, lee cada skill antes de instalarla (instrucciones de terceros que el modelo obedecerá, quizá con scripts), prefiere editores conocidos, instala solo la skill concreta y nunca un repositorio entero, deja que el usuario elija entre instalarla global o en el proyecto y no instala nada sin un sí.
+
+**Por qué se resuelve así.** Cubre el hueco sin añadir pasos ni preguntas a la instalación. Pocas skills buenas valen más que muchas que se solapan, porque la descripción de cada skill instalada se carga en el contexto, y una skill son instrucciones que el modelo obedece, así que se lee antes de instalarla.
+
+## 2026-11-24 — El modelo más capaz para el director
+
+**Qué pasó.** No hubo incidente. La prueba ejecutó el director con un modelo de gama media y aguantó bien en tareas pequeñas. Esto se deriva de la forma de trabajar.
+
+**La regla.** Una recomendación, nunca impuesta: activar el director con el modelo más capaz disponible, con un esfuerzo de razonamiento alto, eligiéndolo con `/model` antes de activar el perfil. Los nombres de modelos solo aparecen como ejemplo en el momento de escribir, en las guías.
+
+**Por qué se resuelve así.** El director entiende el problema, decide con el usuario, escribe los briefs y revisa sobre el diff real; un error ahí se propaga a todos los workers. Los workers reciben en el brief el razonamiento ya hecho, así que ahí un modelo menos capaz aguanta bien. El campo `model` de una skill solo dura el turno que la invoca, así que la elección se hace en la sesión.

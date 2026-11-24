@@ -70,7 +70,7 @@ every project; "project" pieces live in the project and are always written new f
 | Harness sheet | Described in step 5 ("Harness sheet") | `docs/harness.md`: the project's record of its own harness (what goes wrong, pieces chosen and left out and why, the first task). Read by the onboarding and the keeper | Project |
 | Report | Described in the director skill ("The report") and `docs/guide.md` section 2 | One markdown file per stream of work: decisions with the user's reasons, task queue, session log, test script. The director's memory between sessions | Created by the director when a stream starts, in `docs/director-streams/` (or the folder the project's `CLAUDE.md` names), with a name agreed with the user |
 | Project `CLAUDE.md` | `project-example/CLAUDE.md` | The project's rules, read by every session and agent: what the project is, what must never happen, how changes are sized, how to verify, where docs live, git rules | Project |
-| Quick-fixer | `global/agents/quick-fixer.md` | Cheaper helper agent for small fixes the director already diagnosed and the user approved | Global |
+| Quick-fixer | `global/agents/quick-fixer.md` | Helper agent for small fixes the director already diagnosed and the user approved; a bounded fix does not need the most capable model | Global |
 | Progress-doc workflows | `global/skills/new-feature/` (`SKILL.md`, `skills-index.md`), `global/commands/rework.md`, `global/commands/do-feature.md`, `global/commands/fix-bug.md` | Plan a feature or a rework in a progress doc (`docs/progress/`, `docs/rework/`), run it to the end, diagnose bugs before fixing them | Global |
 | `/commit` | `global/templates/commit.md` | Commit only the current task's files and push | Project, adapted from the template |
 | `/update-docs` | `global/templates/update-docs.md` | Close a task: check the code, update the docs, delete the progress doc | Project, adapted from the template |
@@ -84,9 +84,10 @@ relevant part when the user asks "why".
 ## Step 1: explain the model (a few lines)
 
 Before asking anything, give this explanation once, in plain words, adapted to the user's language
-and level; if it was already given in this session (the repository's agent instructions ask for it
-before the skill starts), go straight to what comes after it (one person's way of working, the
-guided first task, how this will go). Something like:
+and level. Look back at your own earlier messages in this session: skip it only when it actually
+appears in one of them (the repository's agent instructions ask for it before the skill starts);
+otherwise give it now, in a message of its own. What comes after it (one person's way of working,
+the guided first task, how this will go) is always said. Something like:
 
 > "Instead of asking the AI for things and checking every result yourself, you talk to it the way you
 > would to a project manager. You tell it what you want, you decide together, and it hands the work
@@ -161,7 +162,7 @@ Use this to connect what they told you with the pieces. Quote their own words ba
 | "It changed my secrets / settings" | The env-file rule in `CLAUDE.md` (`project-example/CLAUDE.md`, rule 1) |
 | "It broke the translations / legal text" | The protected-commit hook |
 | "It deployed / published by accident" | Consent rules in `CLAUDE.md` and a consent-gated `/deploy` |
-| "It's expensive", "I run out of usage" | Model per agent (a preference they set later with `harness-keeper`), quick-fixer on a cheaper model, resuming from the report instead of an old long chat |
+| "It's expensive", "I run out of usage" | Model per agent, each chosen by what that agent's work needs (a preference they set later with `harness-keeper`), and resuming from the report instead of an old long chat |
 | "I lose track of what was done" | The report's task queue and its cumulative test script |
 
 If a pain has no piece here, say so honestly and propose a rule in their `CLAUDE.md` written for it.
@@ -262,10 +263,12 @@ postponing). Say it back in one sentence and ask for their OK. It goes in the ha
 Before writing anything, show the user a summary, for every user, in this order:
 
 1. **The decisions that need their answer**, alone and first, so they are not lost in the rest.
+   When you ask for the answers, name each decision you need (for example "the language and the
+   folder"), never refer to them by position.
 2. **What will be created or changed**, each with one line saying what it is (new, an addition to an
    existing file, or an installed copy; for a developer, with its path).
-3. **What each file will say**, in two or three lines per file (for an installed global piece: an
-   exact copy, or which parts change).
+3. **What each file will say**, in two or three lines per file, the project `CLAUDE.md` included
+   (for an installed global piece: an exact copy, or which parts change).
 4. **What will need their action**: permission prompts for `~/.claude/` and `.claude/` (see step 5),
    merging settings.
 
@@ -310,7 +313,10 @@ know); language of answers; git and consent rules (or the no-git
 section; when the repository has no remote, the git rules say that agents commit and do not push);
 and, if chosen, the profiles and the progress-doc workflows. Preferences such as a testing
 policy or the cleanup rule are not set here: the user sets them later with `harness-keeper`. One
-line says that the director workflow is available and how to activate it. If step 2 agreed a way to
+line says that the director workflow is available and how to activate it. One line says that
+changes to how the harness works (the project's rules, its pieces, the user's preferences) go
+through `harness-keeper`, which shows each change before writing it and keeps `docs/harness.md`
+true. If step 2 agreed a way to
 keep the harness out of what is published, it says which folder is published and that `CLAUDE.md`,
 `docs/` and `.claude/` stay out of it (any move this requires is in the step 4 list).
 
@@ -399,7 +405,9 @@ End with a short summary in the user's language:
 - What was deliberately left out, as "How you behave" says.
 - **Their helper from now on:** present `harness-keeper` by name. They can call it at any time, in
   any session, in their own words: to ask how something works or how to do something, and to change
-  the harness when it does not fit how they work. `/harness-keeper` also works.
+  the harness when it does not fit how they work. `/harness-keeper` also works. One more line,
+  asking for no decision: when they want, it can also help them find skills for the technologies of
+  their project; they only have to ask.
 - Anything they still have to do (for example, finish installing git if they chose to install it
   themselves).
 - **What comes next:** open a new session in the project and ask it to start the onboarding, in

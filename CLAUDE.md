@@ -7,7 +7,7 @@ Rules for working ON this repository. It publishes a commented example of a Clau
 ## Layout
 
 - `global/` — files a user copies to `~/.claude/` (director skill, agents, workflow commands, templates).
-- `optional/` — optional agents. `Explore` overrides Claude Code's built-in Explore agent only to choose model and effort; `web-fetch` is an additional lightweight agent (not an override) that reads public web pages on a cheaper model.
+- `optional/` — optional agents. `Explore` overrides Claude Code's built-in Explore agent only to choose model and effort; `web-fetch` is an additional agent (not an override) that reads public web pages on a model chosen for that job.
 - `project-example/` — files a user copies into a project repo and adapts (`CLAUDE.md` template, profiles, project hook, settings, deploy command).
 - `docs/` — human-facing guides.
 

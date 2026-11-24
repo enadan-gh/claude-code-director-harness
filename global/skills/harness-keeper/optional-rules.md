@@ -48,9 +48,18 @@ If either file exists, add the section; never replace the file.
 frontmatter. The reference sets `model: opus` and `effort: medium` for the worker, and
 `model: sonnet` and `effort: high` for the quick-fixer, both marked as suggestions.
 
-**Why someone would want it (the author's reason).** A bounded, already diagnosed fix does not need
-the strongest model, so the quick-fixer runs on a cheaper one; the worker, which plans and implements
-whole tasks, gets a stronger one. This saves usage without losing quality where it matters.
+**Why someone would want it (the author's reason).** Each agent gets the model its work needs to be
+done well. A bounded, already diagnosed fix does not need the most capable model, so the quick-fixer
+runs on a less capable one; the worker, which plans and implements whole tasks, gets a more capable
+one.
+
+**The director's model.** The director is the session itself, not an agent file: the user chooses
+its model with `/model` (and its effort with the slider there, or `/effort`) before activating the
+profile. The recommendation, never imposed: the most capable model they have, with high effort. The
+director understands the problem, decides with the user, writes the briefs and reviews against the
+real diff, so a mistake there spreads through every worker; the workers receive the reasoning
+already done in the brief, so a less capable model holds up there. A skill's `model` frontmatter
+field only lasts for the turn that invokes it, so it cannot fix the director's model for the session.
 
 **Why someone would not.** If you already pick the model per session and want every agent to follow
 it, or your plan has no access to a given model, fixed values get in the way. Inheriting is the
@@ -72,16 +81,16 @@ simplest choice.
 
 ## (c) The optional Explore and web-fetch agents
 
-**What it does.** Two extra agent files, only to choose a cheaper model for two common jobs:
+**What it does.** Two extra agent files, only to choose the model that fits two common jobs:
 
 - `optional/agents/Explore.md` **overrides** Claude Code's built-in Explore agent (the read-only
   search agent) only to set its model and effort; a user agent named `Explore` replaces the built-in
   one.
 - `optional/agents/web-fetch.md` is an **additional** agent (not an override) that reads public web
-  pages and answers a question about them, on a cheaper model.
+  pages and answers a question about them, on a model chosen for that job.
 
-**Why someone would want it (the author's reason).** Broad code searches and reading web pages do not
-need the strongest model; moving them to a cheaper one saves usage in long sessions.
+**Why someone would want it (the author's reason).** Broad code searches and reading web pages are
+done well without the most capable model, so each runs on the model that fits the job.
 
 **Why someone would not.** If the defaults are fine for you, you need neither. Overriding a built-in
 agent also means your copy does not follow future changes to the built-in one.

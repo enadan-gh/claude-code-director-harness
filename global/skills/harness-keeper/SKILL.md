@@ -1,6 +1,6 @@
 ---
 name: harness-keeper
-description: The user's help desk for their director harness and the way they adapt it to how they work. Answers how the harness works or how to do something with it, from the user's own installed files, and changes it when something does not fit (a rule, a preference, adding or removing a piece), showing every change before writing it and keeping the harness sheet (docs/harness.md) true. Use when the user runs /harness-keeper, says "adjust the harness", "change how the director works", or asks how the harness works, what a piece is for, or how to do something with it ("how do I resume tomorrow?", "how do I tell it to stop touching X?").
+description: The user's help desk for their director harness and the way they adapt it to how they work. Answers how the harness works or how to do something with it, from the user's own installed files, and changes it when something does not fit (a rule, a preference, adding or removing a piece), showing every change before writing it and keeping the harness sheet (docs/harness.md) true. Use when the user runs /harness-keeper, says "adjust the harness", "change how the director works", or asks how the harness works, what a piece is for, or how to do something with it ("how do I resume tomorrow?", "how do I tell it to stop touching X?"), or asks for skills for the technologies of their project.
 ---
 
 # Harness keeper
@@ -121,3 +121,23 @@ section goes and the git rules come in.
 
 Removing a piece is the same in reverse: find every file that refers to it, show what changes in
 each, and update the sheet.
+
+### Skills for the project's stack
+
+The user asks for skills for their technologies, even vaguely ("that thing about skills you
+mentioned", "is there something so you work better with React?").
+
+1. Look at the project's stack (its manifests, configs and folders) and at the skills already
+   installed (`~/.claude/skills/` and the project's `.claude/skills/`).
+2. Search for skills that fit. [skills.sh](https://skills.sh) is one possible source, not the only
+   one; its CLI searches with `npx skills find <query>`.
+3. Propose a few, one line each: what it helps with in this project and who publishes it. Few good
+   ones beat many overlapping ones: every installed skill's description loads into the context.
+4. Before installing, read the skill: it is third-party instructions the model will obey, and it may
+   carry scripts. Prefer known publishers. Install only the specific skill, never a whole repository
+   (with the skills.sh CLI: `npx skills add <owner>/<repo> --skill <name> -a claude-code`).
+5. Where it goes is the user's choice. Explain both: global (`~/.claude/skills/`, the CLI's `-g`) for
+   technologies they use across many projects; in the project (`.claude/skills/`, the CLI's default)
+   for this project only. To a user who does not know, recommend one from what you see; they decide.
+6. Install nothing without an explicit yes, and follow Adjust steps 6 to 8. Afterwards, if they use
+   the progress-doc workflows, add it to the installed `skills-index.md` with when to use it.
