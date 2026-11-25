@@ -183,3 +183,11 @@ Each entry follows the same format: **What happened → The rule → Why it is s
 **The rule.** Each piece has a fixed description of what it does, and "helper" is not used for any of them: the director is the session the user talks to, which decides with them, hands out the work and reviews what really changed; the worker is the agent that carries out each task from the director's brief; the quick-fixer is the agent that applies one small fix already diagnosed and approved; the harness keeper is where the user asks how the harness works and asks to change it. `init-harness`, `harness-onboarding` and `harness-keeper` carry one line: introduce each piece with its description the first time, then always call it by the same name; never use one name for two pieces. The names in the user's language are chosen by the model from those descriptions, with no fixed translations.
 
 **Why it is solved this way.** One name per piece, taken from what it does, so the user is never unsure which piece is meant. A generic word fits several pieces, and once two pieces share it the model starts inventing names.
+
+## 2026-11-25 — The first explanation is given whole
+
+**What happened.** In a test with a model at medium effort, the session summarised the project-manager explanation from the README's agent instructions, and the summary no longer meant the same thing. The instructions gave the explanation in quotes but did not say it had to be given in full, and `init-harness` introduced it with "something like", adapted to the user's level.
+
+**The rule.** The README's agent instructions and the first step of `init-harness` say that the explanation is given whole: it may be adapted to the user's language, but no part of it is dropped or summarised.
+
+**Why it is solved this way.** Every sentence of the explanation carries a part of the model (talking instead of checking, the work handed out, the review of what really changed, the written memory), and a less capable model or a lower effort setting compresses what it is not told to keep. Translating it keeps the meaning; shortening it does not.

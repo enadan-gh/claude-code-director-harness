@@ -183,3 +183,11 @@ Cada entrada sigue el mismo formato: **Qué pasó → La regla → Por qué se r
 **La regla.** Cada pieza tiene una descripción fija de lo que hace, y «ayudante» no se usa para ninguna: el director es la sesión con la que habla el usuario, que decide con él, reparte el trabajo y revisa lo que de verdad cambió; el worker es el agente que ejecuta cada tarea a partir del brief del director; el quick-fixer es el agente que aplica un arreglo pequeño ya diagnosticado y aprobado; el harness keeper es donde el usuario pregunta cómo funciona el harness y pide cambiarlo. `init-harness`, `harness-onboarding` y `harness-keeper` llevan una línea: presentar cada pieza con su descripción la primera vez y después llamarla siempre por el mismo nombre; nunca usar un nombre para dos piezas. Los nombres en el idioma del usuario los elige el modelo a partir de esas descripciones, sin traducciones fijas.
 
 **Por qué se resuelve así.** Un nombre por pieza, sacado de lo que hace, para que el usuario nunca dude de qué pieza se habla. Una palabra genérica encaja con varias piezas, y en cuanto dos piezas la comparten el modelo empieza a inventarse nombres.
+
+## 2026-11-25 — La primera explicación se da entera
+
+**Qué pasó.** En una prueba con un modelo a esfuerzo medio, la sesión resumió la explicación del jefe de proyecto de las instrucciones para el agente del README, y el resumen ya no quería decir lo mismo. Las instrucciones daban la explicación entre comillas pero no decían que hubiera que darla completa, y `init-harness` la presentaba con un «algo así», adaptada al nivel del usuario.
+
+**La regla.** Las instrucciones para el agente del README y el primer paso de `init-harness` dicen que la explicación se da entera: puede adaptarse al idioma del usuario, pero no se quita ni se resume ninguna parte.
+
+**Por qué se resuelve así.** Cada frase de la explicación lleva una parte del modelo (hablar en vez de revisar, el trabajo repartido, la revisión de lo que de verdad cambió, la memoria escrita), y un modelo menos capaz o un esfuerzo más bajo comprime lo que no se le dice que conserve. Traducirla conserva el significado; acortarla no.

@@ -85,11 +85,11 @@ relevant part when the user asks "why".
 
 ## Step 1: explain the model (a few lines)
 
-Before asking anything, give this explanation once, in plain words, adapted to the user's language
-and level. Look back at your own earlier messages in this session: skip it only when it actually
-appears in one of them (the repository's agent instructions ask for it before the skill starts);
-otherwise give it now, in a message of its own. What comes after it (one person's way of working,
-the guided first task, how this will go) is always said. Something like:
+Before asking anything, give this explanation once, in plain words, in the user's language. Look
+back at your own earlier messages in this session: skip it only when it actually appears in one of
+them (the repository's agent instructions ask for it before the skill starts); otherwise give it
+now, in a message of its own. What comes after it (one person's way of working, the guided first
+task, how this will go) is always said. The explanation:
 
 > "Instead of asking the AI for things and checking every result yourself, you talk to it the way you
 > would to a project manager. You tell it what you want, you decide together, and it hands the work
@@ -97,6 +97,8 @@ the guided first task, how this will go) is always said. Something like:
 > changed before telling you. And it writes everything down in a document inside your project: what
 > you decided, what is done and what is left. So tomorrow you open a new chat and it picks up where
 > you left off. We call that role the 'director'."
+
+Give it whole: you may adapt it to the user's language, but do not drop or summarise any part of it.
 
 Add that this is one person's way of working and you will take only what helps them, and one
 sentence more: after the set-up, a guided first task, on something they actually want done, shows

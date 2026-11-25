@@ -152,6 +152,7 @@ All generated `.md` files MUST go inside `docs/`:
 - Temporary progress (new features) → `docs/progress/`
 - Temporary progress (reworks) → `docs/rework/`
 - Per-module documentation → `docs/modules/`
+- Director's reports, one file per work stream → `docs/director-streams/`
 
 **Exception:** only `CLAUDE.md` and `README.md` may exist at root.
 
@@ -210,3 +211,4 @@ Deploy workflow: `docs/technical/DEPLOYMENT.md` and `/deploy`.
 | `docs/modules/` | Per-module deep docs |
 | `docs/audit/` | Code audits and analyses |
 | `docs/pending/` | Pending features & follow-ups |
+| `docs/director-streams/` | Director's reports, one per work stream (state, decisions, task queue) |

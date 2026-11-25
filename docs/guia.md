@@ -139,8 +139,8 @@ El director no es un fichero de agente: es la propia sesión, así que su modelo
 
 La ruta guiada son tres skills: `init-harness` monta el harness, `harness-onboarding` hace contigo una primera tarea y `harness-keeper` responde a cómo funcionan las cosas y hace los ajustes posteriores. Estas opciones se eligen con `harness-keeper` («llama al harness keeper», o `/harness-keeper`), que te ofrece cada una cuando lo que le cuentas la toca, o cuando le preguntas qué se puede ajustar; el catálogo en el que se apoya es [`global/skills/harness-keeper/optional-rules.md`](../global/skills/harness-keeper/optional-rules.md).
 
-## 9. Un punto abierto conocido
+## 9. Ficheros compartidos en un commit
 
-Hay una tensión que no he resuelto. `worker.md` dice que en el commit del worker solo entran sus propios ficheros. La plantilla `commit.md`, en cambio, dice que si la tarea ha añadido contenido a un fichero compartido (un índice, un README, un documento de módulo), se hace commit del fichero entero, aunque contenga también cambios de otro agente.
+`worker.md` dice que en el commit del worker solo entran sus propios ficheros. La plantilla `commit.md` dice que si la tarea ha añadido contenido a un fichero compartido (un índice, un README, un documento de módulo), se hace commit del fichero entero, aunque contenga también cambios de otro agente. Parecen contradecirse, pero para mí no es así: quién escribe en un fichero compartido, y cuándo, lo decide el director.
 
-Cómo convivo con ello: cada agente hace commit de sus rutas, y el caso de dos agentes escribiendo a la vez en el mismo fichero compartido es raro, porque el director implementa en serie por defecto y solo paraleliza tareas con superficies disjuntas. Cuando ocurre, el director lo detecta en la revisión. Si tu forma de trabajar lanza muchos agentes en paralelo, este es un punto que te toca decidir a ti.
+El director implementa en serie por defecto y solo paraleliza tareas cuyas superficies ha comprobado en el código que son disjuntas. Si dos tareas comparten un fichero, decide el orden y van en serie, así que un fichero compartido nunca tiene a la vez cambios a medias de dos agentes. Si aun así se cuela algún solapamiento, el director lo detecta en la revisión.

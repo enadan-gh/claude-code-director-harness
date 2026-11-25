@@ -139,8 +139,8 @@ The director is not an agent file: it is the session itself, so its model is the
 
 The guided route is three skills: `init-harness` sets the harness up, `harness-onboarding` runs a first task with you, and `harness-keeper` answers how things work and makes the later adjustments. These options are set with `harness-keeper` ("adjust the harness"), which offers each one when what you tell it touches it, or when you ask what can be tuned; the catalog it works from is [`global/skills/harness-keeper/optional-rules.md`](../global/skills/harness-keeper/optional-rules.md).
 
-## 9. A known open point
+## 9. Shared files in a commit
 
-There is a tension I have not resolved. `worker.md` says that only the worker's own files go into its commit. The `commit.md` template, on the other hand, says that if the task added content to a shared file (an index, a README, a module doc), the whole file is committed, even if it also holds another agent's changes.
+`worker.md` says that only the worker's own files go into its commit. The `commit.md` template says that if the task added content to a shared file (an index, a README, a module doc), the whole file is committed, even if it also holds another agent's changes. They look contradictory, but for me they are not: who writes to a shared file, and when, is the director's call.
 
-How I live with it: each agent commits its own paths, and the case of two agents writing to the same shared file at the same time is rare, because the director runs implementation sequentially by default and only parallelises tasks with disjoint surfaces. When it does happen, the director catches it in the review. If your setup runs many agents in parallel, this is a point to decide for yourself.
+The director runs implementation sequentially by default and only parallelises tasks whose surfaces it has verified in the code to be disjoint. If two tasks share a file, it decides the order and they go in series, so a shared file never holds two agents' unfinished changes at once. Any overlap that slips through, the director catches in the review.
