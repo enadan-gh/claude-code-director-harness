@@ -69,14 +69,15 @@ director works as usual.
 
 When the task is closed, tell the user in a few lines, without repeating what was already explained:
 
-- **How to resume tomorrow:** open a new session in the project, ask it to activate the director profile
-  and say what they are working on; the director finds the report and picks up where they left off.
+- **How to resume tomorrow:** open a new session in the project, ask it to activate the director
+  profile and say what they are working on; the director finds the report and picks up where they
+  left off.
 - **What was left out at set-up**, from the sheet, so they know it exists: to someone who does not
   program, one sentence for the whole group and its reason, not a list of commands; to a developer,
   the groups with their reasons.
-- **How to get help or change the harness:** when they do not know how to do something, or
-  something does not fit how they work, they call the harness keeper, in their own words (or `/harness-keeper`), and it
-  explains it or helps them change it.
+- **How to get help or change the harness:** when they do not know how to do something, or something
+  does not fit how they work, they call the harness keeper, in their own words (or
+  `/harness-keeper`), and it explains it or helps them change it.
 
 Then mark the first task as done in the sheet's first-task section (one line, in the sheet's
 language). It is the director's own housekeeping, like the report: commit it with an explicit path,

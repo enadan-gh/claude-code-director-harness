@@ -103,10 +103,9 @@ A worker is an invocation of the `Agent` tool with the brief as its prompt. Mech
 - **Agent type: `worker`**, defined globally in `~/.claude/agents/worker.md` (same agent in every
   project; it already sets model and effort). The project's profiles (`profile-backend`,
   `profile-frontend`, …) are *skills* that the worker activates from the brief, not agent types. If
-  `worker` does not appear among the available types, tell the user instead of silently replacing
-  it with the generic one. Quick fixes go to the `quick-fixer` type
-  (`~/.claude/agents/quick-fixer.md`, see "Director's quick fixes"), with the same rule if it does
-  not appear.
+  `worker` does not appear among the available types, tell the user instead of silently replacing it
+  with the generic one. Quick fixes go to the `quick-fixer` type (`~/.claude/agents/quick-fixer.md`,
+  see "Director's quick fixes"), with the same rule if it does not appear.
 - **Every agent that edits counts as a worker**, whether `worker` or `quick-fixer`: the rule of not
   committing while it is running, the sequential regime, the mandatory review and the report
   statuses all apply to it.
@@ -171,12 +170,11 @@ learned the hard way, from real failures:
 8. **All deletions at the end, with an inventory.** A deletion (test data created for validation,
    temporary threads/rows/files, branches, cleanup of any kind) can trigger a permission prompt
    (from Claude Code itself or from any hook) that leaves the worker stopped, waiting for someone
-   who is not watching. That is
-   why the brief orders: during the task NOTHING is deleted; the worker keeps an **inventory** of
-   everything it has created that must disappear (what, where, how it is deleted) and runs those
-   deletions in a **single final step**, right before the report, so that if something blocks, it
-   blocks at the end of the use case and not halfway. If the block happens anyway, the report
-   carries the pending inventory and the director resolves it.
+   who is not watching. That is why the brief orders: during the task NOTHING is deleted; the worker
+   keeps an **inventory** of everything it has created that must disappear (what, where, how it is
+   deleted) and runs those deletions in a **single final step**, right before the report, so that if
+   something blocks, it blocks at the end of the use case and not halfway. If the block happens
+   anyway, the report carries the pending inventory and the director resolves it.
 
 The brief is pasted in full into the report (the task's section) before launching the agent, so
 that it survives compactions.
@@ -235,10 +233,10 @@ Minimums:
 
 ## Director's quick fixes
 
-Quick fixes are applied by the `quick-fixer` agent (a model chosen for bounded fixes, see quick-fixer.md), not by
-the director (bounded scope, and without cluttering the director's context). Flow: director's
-diagnosis → explicit approval by the user → short brief → `quick-fixer` in the background → review
-of the diff → recording.
+Quick fixes are applied by the `quick-fixer` agent (a model chosen for bounded fixes, see
+quick-fixer.md), not by the director (bounded scope, and without cluttering the director's context).
+Flow: director's diagnosis → explicit approval by the user → short brief → `quick-fixer` in the
+background → review of the diff → recording.
 
 - **What a quick fix is:** the "Quick Fix" level of the project's `CLAUDE.md` - a self-contained
   change that needs some judgement but no planning (a localized bug, a style tweak, a minor

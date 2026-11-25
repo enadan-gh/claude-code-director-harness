@@ -50,8 +50,8 @@ problems, and to build with them the smallest setup that solves those problems, 
 You need the cloned `claude-code-director-harness` repository to read the examples.
 
 1. If the working directory, or the folder that holds this skill's source, obviously is that
-   repository (it contains `global/skills/profile-director/SKILL.md` and `project-example/CLAUDE.md`),
-   use it.
+   repository (it contains `global/skills/profile-director/SKILL.md` and
+   `project-example/CLAUDE.md`), use it.
 2. Otherwise ask **once**: "Where did you clone or download the claude-code-director-harness
    repository?" Check the answer by looking for those two files. If they have not downloaded it,
    tell them that this skill needs it next to it and wait; do not reconstruct the files from memory.
@@ -278,7 +278,8 @@ Before writing anything, show the user a summary, for every user, in this order:
 
 Offer the full text of any file and show it when they ask: someone who wants the detail asks for it,
 and nobody has to read whole files to say yes. Then ask for an explicit yes. "Looks good", "go
-ahead" or similar is a yes; silence, a question or "maybe" is not. If they want changes, adjust and show the changed parts again.
+ahead" or similar is a yes; silence, a question or "maybe" is not. If they want changes, adjust and
+show the changed parts again.
 
 ## Step 5: write the chosen pieces
 
@@ -313,16 +314,15 @@ and test commands, or, if there are none, what verification means here); where d
 **the director's reports** live (by default `docs/director-streams/`, one file per stream, named
 with the user when the stream starts; for a user without git or a very simple project a simpler
 folder such as `docs/` is fine: pick it with the user and write it down, the director needs to
-know); language of answers; git and consent rules (or the no-git
-section; when the repository has no remote, the git rules say that agents commit and do not push);
-and, if chosen, the profiles and the progress-doc workflows. Preferences such as a testing
-policy or the cleanup rule are not set here: the user sets them later with `harness-keeper`. One
-line says that the director workflow is available and how to activate it. One line says that
-changes to how the harness works (the project's rules, its pieces, the user's preferences) go
-through `harness-keeper`, which shows each change before writing it and keeps `docs/harness.md`
-true. If step 2 agreed a way to
-keep the harness out of what is published, it says which folder is published and that `CLAUDE.md`,
-`docs/` and `.claude/` stay out of it (any move this requires is in the step 4 list).
+know); language of answers; git and consent rules (or the no-git section; when the repository has no
+remote, the git rules say that agents commit and do not push); and, if chosen, the profiles and the
+progress-doc workflows. Preferences such as a testing policy or the cleanup rule are not set here:
+the user sets them later with `harness-keeper`. One line says that the director workflow is
+available and how to activate it. One line says that changes to how the harness works (the project's
+rules, its pieces, the user's preferences) go through `harness-keeper`, which shows each change
+before writing it and keeps `docs/harness.md` true. If step 2 agreed a way to keep the harness out
+of what is published, it says which folder is published and that `CLAUDE.md`, `docs/` and `.claude/`
+stay out of it (any move this requires is in the step 4 list).
 
 **How results are told to the user.** The project `CLAUDE.md` carries a rule on how results are
 reported to this person, written from what they said in the interview, and it states that it takes
@@ -415,9 +415,9 @@ End with a short summary in the user's language:
 - Anything they still have to do (for example, finish installing git if they chose to install it
   themselves).
 - **What comes next:** open a new session in the project and ask it to start the onboarding, in
-  their own words (`/harness-onboarding` also works). Give the reason in plain words: the new session starts with the project's
-  new `CLAUDE.md` already loaded and a clean context, and it picks up from what was just written
-  down in the harness sheet, starting with the first task.
+  their own words (`/harness-onboarding` also works). Give the reason in plain words: the new
+  session starts with the project's new `CLAUDE.md` already loaded and a clean context, and it picks
+  up from what was just written down in the harness sheet, starting with the first task.
 
 If they chose only a `CLAUDE.md`, with no director, skip the onboarding: tell them the rules are
 read by every new session in the project, and that `harness-keeper`, installed as well, answers
